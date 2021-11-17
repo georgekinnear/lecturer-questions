@@ -1,0 +1,29 @@
+anon_code,anon_course,anon_lec,course_level,course_topic,room_cap,advanced
+1A_L1,1A,L1,M1,Calculus,303,no
+1A_L2,1A,L2,M1,Calculus,303,no
+1A_L3,1A,L3,M1,Calculus,303,no
+1A_L4,1A,L4,M1,Calculus,303,no
+1A_L5,1A,L5,M1,Calculus,473,no
+1A_L6,1A,L6,M1,Calculus,473,no
+1B_L7,1B,L7,E1,Engineering mathematics,473,no
+1B_L8,1B,L8,E1,Engineering mathematics,473,no
+2B_L8,2B,L8,M2,Pure mathematics,313,yes
+2B_L9,2B,L9,M2,Pure mathematics,313,yes
+2B_L10,2B,L10,M2,Pure mathematics,313,yes
+4A_L10,4A,L10,M4,Group theory,104,yes
+3A_L11,3A,L11,M3,Algebra,200,yes
+3B_L12,3B,L12,M3,Complex analysis,197,yes
+3C_L13,3C,L13,M3,Differential equations,197,no
+1F_L14,1F,L14,M1,Data science,193,no
+1C_L15,1C,L15,M1,Linear algebra,350,yes
+1C_L16,1C,L16,M1,Linear algebra,350,yes
+1C_L17,1C,L17,M1,Linear algebra,350,yes
+1C_L5,1C,L5,M1,Linear algebra,350,yes
+1E_L18,1E,L18,E1,Engineering mathematics,194,no
+1E_L19,1E,L19,E1,Engineering mathematics,194,no
+3D_L20,3D,L20,M3,Differential equations,150,no
+1D_L21,1D,L21,M1,Pure mathematics,200,yes
+1D_L17,1D,L17,M1,Pure mathematics,200,yes
+2A_L22,2A,L22,M2,Probability,374,no
+2C_L23,2C,L23,M2,Calculus,313,no
+2D_L24,2D,L24,M2,Statistics,313,no
