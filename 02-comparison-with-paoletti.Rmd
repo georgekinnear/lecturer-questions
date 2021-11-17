@@ -1,0 +1,455 @@
+---
+title: "Lecturer Questions: Comparison with Paoletti et al. (2018)"
+author: "George Kinnear"
+date: "17/11/2021"
+output: 
+  html_document:
+    code_folding: hide
+    df_print: paged
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+
+# Tables
+library(knitr)
+library(kableExtra)
+basic_kable = function(df, ...) {
+  df %>% 
+    kable(...) %>%
+    kable_styling(bootstrap_options = "striped", full_width = F)
+}
+
+# Plot styling
+theme_set(theme_minimal())
+```
+
+# Paoletti et al. (2018) data
+
+This data comes from the table in the supplementary materials posted online. We use it to replicate some of the results in Table 3 of the 2018 ESM paper, and visualise the distributions of the number of questions observed in each category.
+
+```{r read-paoletti-data, message=FALSE, warning=FALSE}
+paoletti_data = read_csv("data/paoletti_table3_data.csv")
+paoletti_data %>% 
+  kable(booktabs = T) %>% 
+  kable_styling(full_width = F)
+
+paoletti_code_counts = paoletti_data %>% 
+  pivot_longer(
+    cols = !Lecturer,
+    names_to = "code_name",
+    values_to = "num_q"
+  )
+
+paoletti_code_counts %>% 
+  group_by(code_name) %>% 
+  summarise(
+    mean_count = mean(num_q),
+    sd = sd(num_q),
+    median = median(num_q),
+    max = max(num_q),
+    min = min(num_q)
+  ) %>% 
+  arrange(ifelse(code_name=="Total",1, 0), -mean_count) %>% 
+  kable(booktabs = T, digits = 1) %>% 
+  kable_styling(full_width = F)
+
+paoletti_code_counts %>% 
+  ggplot(aes(x = fct_reorder(code_name, num_q, .fun = mean, .desc = FALSE),
+             y = num_q)) +
+  aes(fill = code_name) +
+  geom_violin() + 
+  geom_point() +
+  #geom_boxplot(alpha = 0.5, width = 0.3, fill = "white") +
+  stat_summary(fun=mean, geom="point", shape=4, size=6, colour = "red", position = position_nudge(x = 0))+
+    coord_flip() +
+  theme_minimal(base_size = 16) +
+  theme(strip.text=element_text(size=22),
+        axis.text.x=element_text(angle=0),
+        axis.text.y=element_text(size=16),
+        legend.position = "none") +
+  labs(title = "Number of questions of different types",
+       subtitle = "In 11 different lectures",
+       y = NULL,
+       x = NULL)
+```
+
+# Comparable data from our study
+
+Here we load all the data, but then restrict to those courses we have deemed most in line with the "advanced mathematics" course type studied by Paoletti et al.
+
+```{r read-data, message=FALSE, warning=FALSE}
+all_qs_all_lecs <- read_csv("data/ANON_LQ_Maths_All.csv")
+anon_courses <- read_csv("data/ANON_courses.csv")
+
+codes <- c("A", "C", "E", "F", "N", "O", "P", "U", "W", "X")
+# Collapsing C, P, X, O into Other
+collapsed_codes <- c("A", "O", "E", "F", "N", "O", "O", "U", "W", "O")
+
+code_names <- c("Admin", "Convention", "Evaluation", "Fact", "Next step", "Other",
+                "Proof framework", "Understanding check", "Warrant", "Example generation")
+
+code_details <- tibble(code = codes, code_name = code_names) %>% 
+  mutate(
+    collapsed_code = case_when(
+      code %in% c("C", "P", "X", "O") ~ "Other",
+      TRUE ~ code_name
+    )
+  ) %>% 
+  add_row(
+    code = "Total",
+    code_name = "Total",
+    collapsed_code = "Total"
+  )
+
+all_qs_advanced <- all_qs_all_lecs %>% 
+  # restrict to only those courses that were deemed "advanced mathematics"
+  semi_join(
+    anon_courses %>% filter(advanced == "yes"),
+    by = c("course" = "anon_code")
+  )
+
+```
+```{r}
+# Making list of all lectures and category code combos
+lec_cat <- expand_grid(
+  all_qs_advanced %>% select(course, session) %>% distinct(),
+  category = codes
+)
+```
+
+These are the courses that we focus on:
+
+```{r}
+course_demographics <- anon_courses %>% 
+  filter(advanced == "yes") %>% 
+  left_join(all_qs_all_lecs %>% select(course, session) %>% distinct(), by = c("anon_code" = "course")) %>% 
+  group_by(anon_course) %>% 
+  summarise(
+    course_level = first(course_level),
+    course_topic = first(course_topic),
+    room_capacity = max(room_cap),
+    num_lecturers = n_distinct(anon_lec),
+    num_lectures = n(),
+    .groups = "drop"
+  ) %>% 
+  separate(course_level, into = c("M_or_E", "year"), sep = 1)  %>% 
+  select(
+    year,
+    course_code = anon_course,
+    course_topic,
+    room_capacity,
+    num_lecturers,
+    num_lectures
+  ) %>% 
+  mutate(
+    room_capacity_approx = round(room_capacity/25, digits = 0)*25
+  ) %>% 
+  relocate(room_capacity_approx, .after = room_capacity) %>% 
+  arrange(year, -room_capacity, -num_lectures, -num_lecturers, course_topic)
+
+course_demographics %>% 
+  select(-room_capacity) %>% 
+  rename(
+    "Year" = year,
+    "Course code" = course_code,
+    "Topic" = course_topic,
+    "Room capacity (approx.)" = room_capacity_approx,
+    "Number of lecturers" = num_lecturers,
+    "Number of lectures" = num_lectures
+  ) %>% 
+  adorn_totals(c("row")) %>% 
+  kable(booktabs = T) %>% 
+  kable_styling(full_width = F) %>%
+  collapse_rows(columns = 1, latex_hline = "major", valign = "top")
+  
+```
+
+```{r}
+count_qs_by_cat <- all_qs_advanced %>% 
+  mutate(
+    lecture = paste(course, session)
+  ) %>% 
+  tabyl(lecture, category) %>% 
+  select(-"NA_") %>% 
+  separate(
+    col = lecture,
+    into = c("course", "session"),
+    sep = " "
+  ) %>% 
+  adorn_totals(c("col"))
+
+counts_by_lecture <- all_qs_advanced %>%
+  filter(!is.na(category)) %>% 
+  group_by(course, session, category) %>%
+  summarise(
+    num_q = sum(!is.na(category)),
+    num_sr = sum(student_response == "Y"),
+    num_po = sum(student_response == "Y" | wait_time >= 3),
+    .groups = "drop"
+  ) %>%
+  # make sure lectures with no questions are included, with counts of 0
+  full_join(lec_cat, by = c("course", "session", "category")) %>%
+  mutate_all(~replace(., is.na(.), 0)) %>%
+  # tidy up the columns, including replacing category codes with names
+  arrange(course, session, category) %>% 
+  left_join(code_details, by = c("category" = "code")) %>% 
+  select(code_name, everything(), -collapsed_code, -category)
+```
+
+```{r}
+# Add totals for each course/session combo
+# NB - this was a possible alternative approach
+# https://community.rstudio.com/t/getting-summary-by-group-and-overall-using-tidyverse/54656/6
+
+add_group_totals <- function(df) {
+  df %>% 
+    # Add rows containing the totals
+    bind_rows(
+      df %>%
+        group_by(course, session) %>%
+        summarise(across(contains("num_"), sum), .groups = "drop_last") %>% 
+        mutate(code_name = "Total")
+    ) %>% 
+    # Put the totals at the end of each group (just for neatness)
+    mutate(is_total = code_name=="Total") %>% 
+    arrange(course, session, is_total, code_name) %>% 
+    select(-is_total)
+}
+
+produce_summary_table <- function(df) {
+  df %>%
+    group_by(code_name) %>%
+    summarise(across(contains("num_"), list(mean = mean, sd = sd)), .groups = "drop_last")%>% 
+    # Order the rows by frequency, with total at the end
+    mutate(is_total = code_name=="Total") %>% 
+    arrange(is_total, -num_q_mean) %>% 
+    select(-is_total) %>%
+    # Add the 'percentage of group' columns
+    mutate(
+      "num_sr_mean_pc" = num_sr_mean / num_q_mean * 100,
+      "num_po_mean_pc" = num_po_mean / num_q_mean * 100,
+      across(contains("pc"), round, digits = 0),
+      across(where(is.numeric), round, digits = 2)
+    )
+}
+
+show_summary_table <- function(counts_by_lecture_summary_table) {
+  # This is the unformatted table
+  counts_by_lecture_summary_table %>% 
+    kable(booktabs = T) %>% 
+    kable_styling(full_width = T) %>%
+    row_spec(0, angle = 90)
+  
+  counts_by_lecture_summary_table %>% 
+    transmute(
+      "Question category" = code_name,
+      "Mean number of questions per lecture (s.d.)" = paste0(num_q_mean, " (", num_q_sd, ")"),
+      "Mean number of student responses per lecture (as % of category)" = paste0(num_sr_mean, " (", num_sr_mean_pc,"%)"),
+      "Mean number of participation opportunities per lecture (as % of category)" = paste0(num_po_mean, " (", num_po_mean_pc,"%)")
+    ) %>% 
+    kable(booktabs = T) %>% 
+    kable_styling(full_width = T)
+}
+
+plot_summary <- function(counts_by_lecture_inc_totals) {
+
+counts_by_lecture_inc_totals %>% 
+  mutate(
+    code_name = fct_reorder(code_name, num_q, .fun = sum)
+  ) %>% 
+  pivot_longer(
+    cols = contains("num_"),
+    names_to = "type",
+    values_to = "number"
+  ) %>% 
+  mutate(
+    type = case_when(
+      type == "num_q" ~ "questions",
+      type == "num_sr" ~ "questions with student response",
+      type == "num_po" ~ "participation opportunities"
+    )
+  ) %>% 
+  # This is used to omit cases where the count is 0, to avoid overly spiky histograms
+  filter(number > 0) %>% 
+  ggplot(aes(x = number)) +
+  facet_grid(type ~ code_name) +
+  geom_histogram(binwidth = 5) +
+  theme_minimal()
+
+}
+
+```
+
+## Summary - mathematical questions only
+
+Here we remove the `Admin` and `Understanding check` categories.
+
+```{r}
+counts_by_lecture_inc_totals_noAU <- counts_by_lecture %>% 
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  add_group_totals()
+
+counts_by_lecture_summary_table_noAU <- produce_summary_table(counts_by_lecture_inc_totals_noAU)
+
+counts_by_lecture_summary_table_noAU %>% 
+  show_summary_table()
+```
+
+Version of this table with grouped columns, and corresponding LaTeX code for the manuscript:
+
+```{r}
+counts_by_lecture_summary_table_noAU %>% 
+    select(
+      code_name,
+      num_q_mean,
+      num_q_sd,
+      num_sr_mean,
+      num_sr_mean_pc,
+      num_po_mean,
+      num_po_mean_pc
+    ) %>% 
+    kable(booktabs = T,
+          col.name = c("Question category",
+                       "M", "SD",
+                       "M", "% of category",
+                       "M", "% of category")) %>% 
+    kable_styling(full_width = T) %>%
+    add_header_above(c(" " = 1, "Questions per lecture" = 2, "Student responses per lecture" = 2, "Participation opportunities per lecture" = 2))
+```
+
+```{r echo=FALSE}
+counts_by_lecture_summary_table_noAU %>% 
+    select(
+      code_name,
+      num_q_mean,
+      num_q_sd,
+      num_sr_mean,
+      num_sr_mean_pc,
+      num_po_mean,
+      num_po_mean_pc
+    ) %>% 
+    kable(booktabs = T,
+          format = "latex",
+          col.name = c("Question category",
+                       "M", "SD",
+                       "M", "% of category",
+                       "M", "% of category")) %>% 
+    kable_styling(full_width = T) %>%
+    add_header_above(c(" " = 1, "Questions per lecture" = 2, "Student responses per lecture" = 2, "Participation opportunities per lecture" = 2)) %>% 
+  cat()
+```
+
+
+```{r}
+plot_summary(counts_by_lecture_inc_totals_noAU)
+```
+
+# Drawing the comparison
+
+## Questions by category
+
+```{r}
+comparison_of_counts <- bind_rows(
+  "Kinnear et al." = counts_by_lecture_inc_totals_noAU,
+  "Paoletti et al." = paoletti_code_counts %>% rename(course = Lecturer),
+  .id = "Study"
+  )
+```
+
+```{r}
+comparison_of_total_qs <- comparison_of_counts %>% 
+  #filter(code_name %in% c("Proof framework", "Convention", "Total")) %>% 
+  select(Study, code_name, num_q) %>% 
+  group_by(Study, code_name) %>% 
+  tally(num_q, name = "total_qs")
+
+comparison_of_total_qs %>% 
+  pivot_wider(names_from = "Study", values_from = "total_qs") %>% 
+  arrange(code_name == "Total", code_name) %>% 
+  rename(`Question category` = code_name) %>% 
+  basic_kable() %>% 
+  add_header_above(c(" " = 1, "Total number of questions" = 2))
+```
+
+Here we show these counts as proportions, ordered by the frequency in the Paoletti et al. data:
+
+```{r}
+# Produce a list of codes ordered by the frequency of appearance in the Paoletti et al. data
+paoletti_frequency_order <- paoletti_code_counts %>%
+  filter(code_name != "Total") %>%
+  group_by(code_name) %>%
+  tally(num_q) %>%
+  arrange(-n) %>%
+  select(code_name) %>%
+  deframe()
+
+comparison_of_total_qs %>% 
+  filter(code_name != "Total") %>% 
+  # Group the smaller categories with "Other"
+  #mutate(code_name = fct_other(code_name, keep = c("Fact", "Next step", "Warrant", "Evaluation"))) %>% 
+  # Fix the order that things appear in
+  #mutate(code_name = fct_relevel(code_name, "Fact", "Next step", "Warrant", "Evaluation", "Other")) %>% 
+  mutate(code_name = fct_relevel(code_name, paoletti_frequency_order)) %>% 
+  ggplot(aes(
+    x = reorder(Study, desc(Study)), # put the studies in chronological order
+    y = total_qs,
+    fill = code_name,
+  )) +
+  geom_bar(position = "fill", stat = "identity") +
+  scale_fill_viridis_d("Category", begin = 0.1, end = 0.8, option = "plasma", direction = -1) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Study", y = "Proportion of questions")
+
+
+ggsave("figs/FIG_Paoletti_comparison_proportions.pdf",width=15,height=8,units="cm",dpi=300)
+```
+
+
+
+This shows each of the lectures as individual points:
+
+```{r}
+
+comparison_of_counts %>% 
+  mutate(
+    code_name = fct_reorder(code_name, num_q, .fun = max, .desc = FALSE)
+  ) %>% 
+  ggplot(aes(y = Study,
+             x = num_q)) +
+  facet_grid(rows = vars(code_name),
+             switch = "both") +
+  #aes(fill = study, alpha = ifelse(study=="Kinnear", 1, 0.5)) +
+  aes(fill = Study) +
+  geom_jitter(alpha = 0.2) +
+  geom_boxplot(width = 0.5, alpha = 0.8, outlier.shape = NA) +
+  scale_fill_viridis_d(begin = 0.2, end = 0.7, direction = -1) +
+  #stat_summary(fun=mean, geom="point", shape=8, size=6, colour = "red", alpha = 1, position = position_nudge(x = 0))+
+  coord_cartesian(xlim=c(0, 50)) +
+  #coord_flip() +
+  theme_minimal(base_size = 16) +
+  theme(strip.text=element_text(size=16),
+        panel.border = element_rect(color = "#cccccc", fill = NA, size = 1),
+        panel.spacing = unit(0, "lines"),
+        strip.text.y.left = element_text(angle = 0, hjust = 1),
+        strip.placement = "outside",
+        axis.text.x=element_text(angle=0),
+        #axis.text.y=element_text(size=12),
+        axis.text.y=element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.position = "bottom") +
+  labs(y = NULL,
+       x = "Number of questions per lecture")
+
+ggsave("figs/FIG_Paoletti_comparison.pdf",width=30,height=15,units="cm",dpi=300)
+
+```
+
+
+#### Session info
+
+```{r}
+sessionInfo()
+```
