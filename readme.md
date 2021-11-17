@@ -12,10 +12,10 @@ The script [`00-data-import.R`](00-data-import.R) was used to pull in these data
 
 ## Analyses
 
-- [01-data-summary.Rmd](blob/main/01-data-summary.Rmd) ([output](https://htmlpreview.github.io/?https://github.com/georgekinnear/lecturer-questions/blob/main/01-data-summary.html))
+- [01-data-summary.Rmd](01-data-summary.Rmd) ([output](https://htmlpreview.github.io/?https://github.com/georgekinnear/lecturer-questions/blob/main/01-data-summary.html))
 
   Reads in all of the data and presents various summaries, e.g. breakdown of questions by category and lecture.
   
-- [02-comparison-with-paoletti.Rmd](blob/main/02-comparison-with-paoletti.Rmd) ([output](https://htmlpreview.github.io/?https://github.com/georgekinnear/lecturer-questions/blob/main/02-comparison-with-paoletti.html))
+- [02-comparison-with-paoletti.Rmd](02-comparison-with-paoletti.Rmd) ([output](https://htmlpreview.github.io/?https://github.com/georgekinnear/lecturer-questions/blob/main/02-comparison-with-paoletti.html))
   
   Reads the Paoletti et al. (2018) data, and presents a summary of the comparable lectures from our sample.
