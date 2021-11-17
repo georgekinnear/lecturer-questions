@@ -1,0 +1,372 @@
+---
+title: "Lecturer Questions: Data summary"
+author: "George Kinnear"
+date: "17/11/2021"
+output: 
+  html_document:
+    code_folding: hide
+    df_print: paged
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+
+# Tables
+library(knitr)
+library(kableExtra)
+basic_kable = function(df, ...) {
+  df %>% 
+    kable(...) %>%
+    kable_styling(bootstrap_options = "striped", full_width = F)
+}
+
+# Plot styling
+theme_set(theme_minimal())
+```
+
+```{r read-data, message=FALSE, warning=FALSE}
+all_qs_all_lecs <- read_csv("data/ANON_LQ_Maths_All.csv")
+anon_courses <- read_csv("data/ANON_courses.csv")
+
+codes <- c("A", "C", "E", "F", "N", "O", "P", "U", "W", "X")
+# Collapsing C, P, X, O into Other
+collapsed_codes <- c("A", "O", "E", "F", "N", "O", "O", "U", "W", "O")
+
+code_names <- c("Admin", "Convention", "Evaluation", "Fact", "Next step", "Other",
+                "Proof framework", "Understanding check", "Warrant", "Example generation")
+
+code_details <- tibble(code = codes, code_name = code_names) %>% 
+  mutate(
+    collapsed_code = case_when(
+      code %in% c("C", "P", "X", "O") ~ "Other",
+      TRUE ~ code_name
+    )
+  ) %>% 
+  add_row(
+    code = "Total",
+    code_name = "Total",
+    collapsed_code = "Total"
+  )
+
+```
+```{r}
+# Making list of all lectures and category code combos
+lec_cat <- expand_grid(
+  all_qs_all_lecs %>% select(course, session) %>% distinct(),
+  category = codes
+)
+```
+
+# Summary of the data
+
+Codes used to categorise questions:
+
+```{r}
+code_details %>% 
+  basic_kable()
+```
+
+## Summary of courses
+
+```{r}
+course_demographics <- anon_courses %>% 
+  left_join(all_qs_all_lecs %>% select(course, session) %>% distinct(), by = c("anon_code" = "course")) %>% 
+  group_by(anon_course) %>% 
+  summarise(
+    course_level = first(course_level),
+    course_topic = first(course_topic),
+    room_capacity = max(room_cap),
+    num_lecturers = n_distinct(anon_lec),
+    num_lectures = n(),
+    .groups = "drop"
+  ) %>% 
+  separate(course_level, into = c("M_or_E", "year"), sep = 1)  %>% 
+  select(
+    year,
+    course_code = anon_course,
+    course_topic,
+    room_capacity,
+    num_lecturers,
+    num_lectures
+  ) %>% 
+  mutate(
+    room_capacity_approx = round(room_capacity/25, digits = 0)*25
+  ) %>% 
+  relocate(room_capacity_approx, .after = room_capacity) %>% 
+  arrange(year, -room_capacity, -num_lectures, -num_lecturers, course_topic)
+
+course_demographics %>% 
+  select(-room_capacity) %>% 
+  rename(
+    "Year" = year,
+    "Course code" = course_code,
+    "Topic" = course_topic,
+    "Room capacity (approx.)" = room_capacity_approx,
+    "Number of lecturers" = num_lecturers,
+    "Number of lectures" = num_lectures
+  ) %>% 
+  adorn_totals(c("row")) %>% 
+  kable(booktabs = T) %>% 
+  kable_styling(full_width = F) %>%
+  collapse_rows(columns = 1, latex_hline = "major", valign = "top")
+  
+```
+
+## Courses, lecturers, and question counts
+```{r}
+all_qs_all_lecs %>% 
+  group_by(course) %>% 
+  summarise(
+    #num_qs = n(),
+    num_qs = sum(!is.na(category)), # to count only rows with a question identified
+    num_lectures = n_distinct(session),
+    .groups = "drop"
+  ) %>% 
+  separate(course, c("course", "lecturer")) %>% 
+  adorn_totals() %>% 
+  basic_kable(booktabs = T)
+```
+
+
+## Questions by category
+```{r}
+all_qs_all_lecs %>% 
+  tabyl(course, category) %>% 
+  select(-"NA_") %>% 
+  adorn_totals(c("row", "col")) %>% 
+  basic_kable(booktabs = T)
+```
+
+
+Number of questions that are mathematical, i.e. not Admin or Understanding checks:
+```{r}
+## Total number of questions
+all_qs_all_lecs %>%
+  #filter(category != "A" & category != "U") %>% 
+  tabyl(course, category) %>% 
+  select(-"NA_", -A, -U) %>% 
+  adorn_totals(c("row", "col")) %>% 
+  basic_kable(booktabs = T)
+```
+
+
+# Questions by category and lecture
+
+```{r}
+
+count_qs_by_cat = all_qs_all_lecs %>% 
+  mutate(
+    lecture = paste(course, session)
+  ) %>% 
+  tabyl(lecture, category) %>% 
+  select(-"NA_") %>% 
+  separate(
+    col = lecture,
+    into = c("course", "session"),
+    sep = " "
+  ) %>% 
+  adorn_totals(c("col"))
+
+count_qs_by_cat %>% 
+  arrange(course, session)
+```
+
+# Opportunities to participate
+
+We create a table that counts all:
+
+* questions,
+* questions with student responses, and
+* participation opportunities
+
+in each of the lectures in the sample.
+
+```{r}
+counts_by_lecture <- all_qs_all_lecs %>%
+  filter(!is.na(category)) %>% 
+  group_by(course, session, category) %>%
+  summarise(
+    num_q = sum(!is.na(category)),
+    num_sr = sum(student_response == "Y"),
+    num_po = sum(student_response == "Y" | wait_time >= 3),
+    .groups = "drop"
+  ) %>%
+  # make sure lectures with no questions are included, with counts of 0
+  full_join(lec_cat, by = c("course", "session", "category")) %>%
+  mutate_all(~replace(., is.na(.), 0)) %>%
+  # tidy up the columns, including replacing category codes with names
+  arrange(course, session, category) %>% 
+  left_join(code_details, by = c("category" = "code")) %>% 
+  select(code_name, everything(), -collapsed_code, -category)
+```
+
+The following sections present summaries of this data, with different choices about which categories to include.
+
+Note that the histograms that are plotted show **only the nonzero counts** (to avoid having a large spike at 0 in many cases).
+
+## Summary - all questions
+
+```{r}
+# Add totals for each course/session combo
+# NB - this was a possible alternative approach
+# https://community.rstudio.com/t/getting-summary-by-group-and-overall-using-tidyverse/54656/6
+
+add_group_totals <- function(df) {
+  df %>% 
+    # Add rows containing the totals
+    bind_rows(
+      df %>%
+        group_by(course, session) %>%
+        summarise(across(contains("num_"), sum), .groups = "drop_last") %>% 
+        mutate(code_name = "Total")
+    ) %>% 
+    # Put the totals at the end of each group (just for neatness)
+    mutate(is_total = code_name=="Total") %>% 
+    arrange(course, session, is_total, code_name) %>% 
+    select(-is_total)
+}
+
+counts_by_lecture_inc_totals <- add_group_totals(counts_by_lecture)
+
+produce_summary_table <- function(df) {
+  df %>%
+    group_by(code_name) %>%
+    summarise(across(contains("num_"), list(mean = mean, sd = sd)), .groups = "drop_last")%>% 
+    # Order the rows by frequency, with total at the end
+    mutate(is_total = code_name=="Total") %>% 
+    arrange(is_total, -num_q_mean) %>% 
+    select(-is_total) %>%
+    # Add the 'percentage of group' columns
+    mutate(
+      "num_sr_mean_pc" = num_sr_mean / num_q_mean * 100,
+      "num_po_mean_pc" = num_po_mean / num_q_mean * 100,
+      across(contains("pc"), round, digits = 0),
+      across(where(is.numeric), round, digits = 2)
+    )
+}
+
+counts_by_lecture_summary_table <- produce_summary_table(counts_by_lecture_inc_totals)
+
+show_summary_table <- function(counts_by_lecture_summary_table) {
+  # This is the unformatted table
+  counts_by_lecture_summary_table %>% 
+    kable(booktabs = T) %>% 
+    kable_styling(full_width = T) %>%
+    row_spec(0, angle = 90)
+  
+  counts_by_lecture_summary_table %>% 
+    transmute(
+      "Question category" = code_name,
+      "Mean number of questions per lecture (s.d.)" = paste0(num_q_mean, " (", num_q_sd, ")"),
+      "Mean number of student responses per lecture (as % of category)" = paste0(num_sr_mean, " (", num_sr_mean_pc,"%)"),
+      "Mean number of participation opportunities per lecture (as % of category)" = paste0(num_po_mean, " (", num_po_mean_pc,"%)")
+    ) %>% 
+    kable(booktabs = T) %>% 
+    kable_styling(full_width = T)
+}
+
+show_summary_table(counts_by_lecture_summary_table)
+
+plot_summary <- function(counts_by_lecture_inc_totals) {
+
+counts_by_lecture_inc_totals %>% 
+  mutate(
+    code_name = fct_reorder(code_name, num_q, .fun = sum)
+  ) %>% 
+  pivot_longer(
+    cols = contains("num_"),
+    names_to = "type",
+    values_to = "number"
+  ) %>% 
+  mutate(
+    type = case_when(
+      type == "num_q" ~ "questions",
+      type == "num_sr" ~ "questions with student response",
+      type == "num_po" ~ "participation opportunities"
+    )
+  ) %>% 
+  # This is used to omit cases where the count is 0, to avoid overly spiky histograms
+  filter(number > 0) %>% 
+  ggplot(aes(x = number)) +
+  facet_grid(type ~ code_name) +
+  geom_histogram(binwidth = 5) +
+  theme_minimal()
+
+}
+
+counts_by_lecture_inc_totals %>% 
+  #filter(code_name %in% c("Proof framework")) %>% 
+  plot_summary()
+```
+
+## Summary - mathematical questions only
+
+Here we remove the `Admin` and `Understanding check` categories.
+
+```{r}
+
+counts_by_lecture_inc_totals_noAU <- counts_by_lecture %>% 
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  add_group_totals()
+
+counts_by_lecture_summary_table_noAU <- produce_summary_table(counts_by_lecture_inc_totals_noAU)
+
+counts_by_lecture_summary_table_noAU %>% 
+  show_summary_table()
+```
+
+Version of this table with grouped columns, and corresponding LaTeX code for the manuscript:
+
+```{r}
+counts_by_lecture_summary_table_noAU %>% 
+    select(
+      code_name,
+      num_q_mean,
+      num_q_sd,
+      num_sr_mean,
+      num_sr_mean_pc,
+      num_po_mean,
+      num_po_mean_pc
+    ) %>% 
+    kable(booktabs = T,
+          col.name = c("Question category",
+                       "M", "SD",
+                       "M", "% of category",
+                       "M", "% of category")) %>% 
+    kable_styling(full_width = T) %>%
+    add_header_above(c(" " = 1, "Questions per lecture" = 2, "Student responses per lecture" = 2, "Participation opportunities per lecture" = 2))
+```
+
+```{r echo=FALSE}
+counts_by_lecture_summary_table_noAU %>% 
+    select(
+      code_name,
+      num_q_mean,
+      num_q_sd,
+      num_sr_mean,
+      num_sr_mean_pc,
+      num_po_mean,
+      num_po_mean_pc
+    ) %>% 
+    kable(booktabs = T,
+          format = "latex",
+          col.name = c("Question category",
+                       "M", "SD",
+                       "M", "% of category",
+                       "M", "% of category")) %>% 
+    kable_styling(full_width = T) %>%
+    add_header_above(c(" " = 1, "Questions per lecture" = 2, "Student responses per lecture" = 2, "Participation opportunities per lecture" = 2)) %>% 
+  cat()
+```
+
+
+```{r}
+plot_summary(counts_by_lecture_inc_totals_noAU)
+```
+
+#### Session info
+
+```{r}
+sessionInfo()
+```
