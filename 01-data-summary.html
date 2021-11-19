@@ -5119,7 +5119,9 @@ add_group_totals &lt;- function(df) {
 
 counts_by_lecture_inc_totals &lt;- add_group_totals(counts_by_lecture)
 
-produce_summary_table &lt;- function(df) {
+counts_by_lecture_inc_totals %&gt;% 
+  write_csv(&quot;data/output-01-counts_by_lecture_inc_totals.csv&quot;)</code></pre>
+<pre class="r"><code>produce_summary_table &lt;- function(df) {
   df %&gt;%
     group_by(code_name) %&gt;%
     summarise(across(contains(&quot;num_&quot;), list(mean = mean, sd = sd)), .groups = &quot;drop_last&quot;)%&gt;% 

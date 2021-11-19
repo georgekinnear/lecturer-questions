@@ -229,6 +229,11 @@ add_group_totals <- function(df) {
 
 counts_by_lecture_inc_totals <- add_group_totals(counts_by_lecture)
 
+counts_by_lecture_inc_totals %>% 
+  write_csv("data/output-01-counts_by_lecture_inc_totals.csv")
+```
+
+```{r}
 produce_summary_table <- function(df) {
   df %>%
     group_by(code_name) %>%
