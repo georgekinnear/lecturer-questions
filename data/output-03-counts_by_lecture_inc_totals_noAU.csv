@@ -1,0 +1,1225 @@
+code_name,course,session,num_q,num_sr,num_po
+Convention,1A_L1,S1,0,0,0
+Evaluation,1A_L1,S1,0,0,0
+Example generation,1A_L1,S1,0,0,0
+Fact,1A_L1,S1,0,0,0
+Next step,1A_L1,S1,5,1,4
+Other,1A_L1,S1,0,0,0
+Proof framework,1A_L1,S1,0,0,0
+Warrant,1A_L1,S1,0,0,0
+Total,1A_L1,S1,5,1,4
+Convention,1A_L1,S2,0,0,0
+Evaluation,1A_L1,S2,0,0,0
+Example generation,1A_L1,S2,0,0,0
+Fact,1A_L1,S2,1,1,1
+Next step,1A_L1,S2,0,0,0
+Other,1A_L1,S2,0,0,0
+Proof framework,1A_L1,S2,0,0,0
+Warrant,1A_L1,S2,0,0,0
+Total,1A_L1,S2,1,1,1
+Convention,1A_L1,S3,0,0,0
+Evaluation,1A_L1,S3,0,0,0
+Example generation,1A_L1,S3,0,0,0
+Fact,1A_L1,S3,6,2,3
+Next step,1A_L1,S3,0,0,0
+Other,1A_L1,S3,0,0,0
+Proof framework,1A_L1,S3,0,0,0
+Warrant,1A_L1,S3,3,2,2
+Total,1A_L1,S3,9,4,5
+Convention,1A_L1,S4,0,0,0
+Evaluation,1A_L1,S4,3,1,2
+Example generation,1A_L1,S4,1,1,1
+Fact,1A_L1,S4,0,0,0
+Next step,1A_L1,S4,5,3,3
+Other,1A_L1,S4,0,0,0
+Proof framework,1A_L1,S4,0,0,0
+Warrant,1A_L1,S4,11,4,5
+Total,1A_L1,S4,20,9,11
+Convention,1A_L2,S1,0,0,0
+Evaluation,1A_L2,S1,1,0,0
+Example generation,1A_L2,S1,0,0,0
+Fact,1A_L2,S1,4,1,2
+Next step,1A_L2,S1,0,0,0
+Other,1A_L2,S1,0,0,0
+Proof framework,1A_L2,S1,0,0,0
+Warrant,1A_L2,S1,4,1,2
+Total,1A_L2,S1,9,2,4
+Convention,1A_L2,S2,0,0,0
+Evaluation,1A_L2,S2,0,0,0
+Example generation,1A_L2,S2,0,0,0
+Fact,1A_L2,S2,7,5,6
+Next step,1A_L2,S2,2,1,2
+Other,1A_L2,S2,0,0,0
+Proof framework,1A_L2,S2,0,0,0
+Warrant,1A_L2,S2,0,0,0
+Total,1A_L2,S2,9,6,8
+Convention,1A_L2,S3,0,0,0
+Evaluation,1A_L2,S3,0,0,0
+Example generation,1A_L2,S3,0,0,0
+Fact,1A_L2,S3,0,0,0
+Next step,1A_L2,S3,14,6,8
+Other,1A_L2,S3,0,0,0
+Proof framework,1A_L2,S3,0,0,0
+Warrant,1A_L2,S3,2,1,1
+Total,1A_L2,S3,16,7,9
+Convention,1A_L2,S4,0,0,0
+Evaluation,1A_L2,S4,0,0,0
+Example generation,1A_L2,S4,0,0,0
+Fact,1A_L2,S4,0,0,0
+Next step,1A_L2,S4,5,1,2
+Other,1A_L2,S4,0,0,0
+Proof framework,1A_L2,S4,0,0,0
+Warrant,1A_L2,S4,0,0,0
+Total,1A_L2,S4,5,1,2
+Convention,1A_L3,S1,0,0,0
+Evaluation,1A_L3,S1,0,0,0
+Example generation,1A_L3,S1,0,0,0
+Fact,1A_L3,S1,0,0,0
+Next step,1A_L3,S1,0,0,0
+Other,1A_L3,S1,0,0,0
+Proof framework,1A_L3,S1,0,0,0
+Warrant,1A_L3,S1,0,0,0
+Total,1A_L3,S1,0,0,0
+Convention,1A_L3,S2,0,0,0
+Evaluation,1A_L3,S2,0,0,0
+Example generation,1A_L3,S2,0,0,0
+Fact,1A_L3,S2,0,0,0
+Next step,1A_L3,S2,0,0,0
+Other,1A_L3,S2,0,0,0
+Proof framework,1A_L3,S2,0,0,0
+Warrant,1A_L3,S2,0,0,0
+Total,1A_L3,S2,0,0,0
+Convention,1A_L3,S3,0,0,0
+Evaluation,1A_L3,S3,0,0,0
+Example generation,1A_L3,S3,0,0,0
+Fact,1A_L3,S3,0,0,0
+Next step,1A_L3,S3,0,0,0
+Other,1A_L3,S3,0,0,0
+Proof framework,1A_L3,S3,0,0,0
+Warrant,1A_L3,S3,0,0,0
+Total,1A_L3,S3,0,0,0
+Convention,1A_L3,S4,0,0,0
+Evaluation,1A_L3,S4,0,0,0
+Example generation,1A_L3,S4,0,0,0
+Fact,1A_L3,S4,0,0,0
+Next step,1A_L3,S4,0,0,0
+Other,1A_L3,S4,0,0,0
+Proof framework,1A_L3,S4,0,0,0
+Warrant,1A_L3,S4,0,0,0
+Total,1A_L3,S4,0,0,0
+Convention,1A_L4,S1,0,0,0
+Evaluation,1A_L4,S1,0,0,0
+Example generation,1A_L4,S1,0,0,0
+Fact,1A_L4,S1,0,0,0
+Next step,1A_L4,S1,0,0,0
+Other,1A_L4,S1,0,0,0
+Proof framework,1A_L4,S1,0,0,0
+Warrant,1A_L4,S1,0,0,0
+Total,1A_L4,S1,0,0,0
+Convention,1A_L4,S2,0,0,0
+Evaluation,1A_L4,S2,0,0,0
+Example generation,1A_L4,S2,0,0,0
+Fact,1A_L4,S2,0,0,0
+Next step,1A_L4,S2,0,0,0
+Other,1A_L4,S2,0,0,0
+Proof framework,1A_L4,S2,0,0,0
+Warrant,1A_L4,S2,0,0,0
+Total,1A_L4,S2,0,0,0
+Convention,1A_L4,S3,0,0,0
+Evaluation,1A_L4,S3,0,0,0
+Example generation,1A_L4,S3,0,0,0
+Fact,1A_L4,S3,0,0,0
+Next step,1A_L4,S3,0,0,0
+Other,1A_L4,S3,0,0,0
+Proof framework,1A_L4,S3,0,0,0
+Warrant,1A_L4,S3,0,0,0
+Total,1A_L4,S3,0,0,0
+Convention,1A_L4,S4,0,0,0
+Evaluation,1A_L4,S4,0,0,0
+Example generation,1A_L4,S4,0,0,0
+Fact,1A_L4,S4,0,0,0
+Next step,1A_L4,S4,0,0,0
+Other,1A_L4,S4,0,0,0
+Proof framework,1A_L4,S4,0,0,0
+Warrant,1A_L4,S4,0,0,0
+Total,1A_L4,S4,0,0,0
+Convention,1A_L5,S1,0,0,0
+Evaluation,1A_L5,S1,0,0,0
+Example generation,1A_L5,S1,1,1,1
+Fact,1A_L5,S1,0,0,0
+Next step,1A_L5,S1,0,0,0
+Other,1A_L5,S1,0,0,0
+Proof framework,1A_L5,S1,0,0,0
+Warrant,1A_L5,S1,3,2,3
+Total,1A_L5,S1,4,3,4
+Convention,1A_L5,S2,0,0,0
+Evaluation,1A_L5,S2,0,0,0
+Example generation,1A_L5,S2,0,0,0
+Fact,1A_L5,S2,1,1,1
+Next step,1A_L5,S2,0,0,0
+Other,1A_L5,S2,0,0,0
+Proof framework,1A_L5,S2,0,0,0
+Warrant,1A_L5,S2,0,0,0
+Total,1A_L5,S2,1,1,1
+Convention,1A_L5,S3,0,0,0
+Evaluation,1A_L5,S3,0,0,0
+Example generation,1A_L5,S3,0,0,0
+Fact,1A_L5,S3,0,0,0
+Next step,1A_L5,S3,0,0,0
+Other,1A_L5,S3,0,0,0
+Proof framework,1A_L5,S3,0,0,0
+Warrant,1A_L5,S3,0,0,0
+Total,1A_L5,S3,0,0,0
+Convention,1A_L5,S4,0,0,0
+Evaluation,1A_L5,S4,0,0,0
+Example generation,1A_L5,S4,0,0,0
+Fact,1A_L5,S4,0,0,0
+Next step,1A_L5,S4,0,0,0
+Other,1A_L5,S4,0,0,0
+Proof framework,1A_L5,S4,0,0,0
+Warrant,1A_L5,S4,0,0,0
+Total,1A_L5,S4,0,0,0
+Convention,1A_L6,S1,0,0,0
+Evaluation,1A_L6,S1,0,0,0
+Example generation,1A_L6,S1,0,0,0
+Fact,1A_L6,S1,0,0,0
+Next step,1A_L6,S1,0,0,0
+Other,1A_L6,S1,0,0,0
+Proof framework,1A_L6,S1,0,0,0
+Warrant,1A_L6,S1,0,0,0
+Total,1A_L6,S1,0,0,0
+Convention,1A_L6,S2,0,0,0
+Evaluation,1A_L6,S2,1,1,1
+Example generation,1A_L6,S2,0,0,0
+Fact,1A_L6,S2,1,0,0
+Next step,1A_L6,S2,3,2,3
+Other,1A_L6,S2,0,0,0
+Proof framework,1A_L6,S2,0,0,0
+Warrant,1A_L6,S2,0,0,0
+Total,1A_L6,S2,5,3,4
+Convention,1A_L6,S3,0,0,0
+Evaluation,1A_L6,S3,0,0,0
+Example generation,1A_L6,S3,0,0,0
+Fact,1A_L6,S3,0,0,0
+Next step,1A_L6,S3,0,0,0
+Other,1A_L6,S3,0,0,0
+Proof framework,1A_L6,S3,0,0,0
+Warrant,1A_L6,S3,0,0,0
+Total,1A_L6,S3,0,0,0
+Convention,1A_L6,S4,0,0,0
+Evaluation,1A_L6,S4,2,0,0
+Example generation,1A_L6,S4,0,0,0
+Fact,1A_L6,S4,1,0,0
+Next step,1A_L6,S4,3,0,1
+Other,1A_L6,S4,0,0,0
+Proof framework,1A_L6,S4,0,0,0
+Warrant,1A_L6,S4,0,0,0
+Total,1A_L6,S4,6,0,1
+Convention,1B_L7,S1,0,0,0
+Evaluation,1B_L7,S1,0,0,0
+Example generation,1B_L7,S1,0,0,0
+Fact,1B_L7,S1,3,0,1
+Next step,1B_L7,S1,0,0,0
+Other,1B_L7,S1,0,0,0
+Proof framework,1B_L7,S1,0,0,0
+Warrant,1B_L7,S1,0,0,0
+Total,1B_L7,S1,3,0,1
+Convention,1B_L7,S2,0,0,0
+Evaluation,1B_L7,S2,0,0,0
+Example generation,1B_L7,S2,0,0,0
+Fact,1B_L7,S2,0,0,0
+Next step,1B_L7,S2,0,0,0
+Other,1B_L7,S2,0,0,0
+Proof framework,1B_L7,S2,0,0,0
+Warrant,1B_L7,S2,0,0,0
+Total,1B_L7,S2,0,0,0
+Convention,1B_L7,S3,0,0,0
+Evaluation,1B_L7,S3,0,0,0
+Example generation,1B_L7,S3,0,0,0
+Fact,1B_L7,S3,0,0,0
+Next step,1B_L7,S3,0,0,0
+Other,1B_L7,S3,0,0,0
+Proof framework,1B_L7,S3,0,0,0
+Warrant,1B_L7,S3,0,0,0
+Total,1B_L7,S3,0,0,0
+Convention,1B_L7,S4,0,0,0
+Evaluation,1B_L7,S4,1,1,1
+Example generation,1B_L7,S4,0,0,0
+Fact,1B_L7,S4,0,0,0
+Next step,1B_L7,S4,0,0,0
+Other,1B_L7,S4,1,1,1
+Proof framework,1B_L7,S4,0,0,0
+Warrant,1B_L7,S4,0,0,0
+Total,1B_L7,S4,2,2,2
+Convention,1B_L8,S1,0,0,0
+Evaluation,1B_L8,S1,0,0,0
+Example generation,1B_L8,S1,0,0,0
+Fact,1B_L8,S1,1,1,1
+Next step,1B_L8,S1,2,0,2
+Other,1B_L8,S1,0,0,0
+Proof framework,1B_L8,S1,0,0,0
+Warrant,1B_L8,S1,1,1,1
+Total,1B_L8,S1,4,2,4
+Convention,1B_L8,S2,0,0,0
+Evaluation,1B_L8,S2,0,0,0
+Example generation,1B_L8,S2,0,0,0
+Fact,1B_L8,S2,0,0,0
+Next step,1B_L8,S2,0,0,0
+Other,1B_L8,S2,0,0,0
+Proof framework,1B_L8,S2,0,0,0
+Warrant,1B_L8,S2,0,0,0
+Total,1B_L8,S2,0,0,0
+Convention,1B_L8,S3,0,0,0
+Evaluation,1B_L8,S3,0,0,0
+Example generation,1B_L8,S3,0,0,0
+Fact,1B_L8,S3,0,0,0
+Next step,1B_L8,S3,0,0,0
+Other,1B_L8,S3,0,0,0
+Proof framework,1B_L8,S3,0,0,0
+Warrant,1B_L8,S3,0,0,0
+Total,1B_L8,S3,0,0,0
+Convention,1B_L8,S4,0,0,0
+Evaluation,1B_L8,S4,0,0,0
+Example generation,1B_L8,S4,0,0,0
+Fact,1B_L8,S4,0,0,0
+Next step,1B_L8,S4,0,0,0
+Other,1B_L8,S4,0,0,0
+Proof framework,1B_L8,S4,0,0,0
+Warrant,1B_L8,S4,0,0,0
+Total,1B_L8,S4,0,0,0
+Convention,1C_L15,S1,3,1,1
+Evaluation,1C_L15,S1,1,1,1
+Example generation,1C_L15,S1,0,0,0
+Fact,1C_L15,S1,3,2,2
+Next step,1C_L15,S1,1,0,0
+Other,1C_L15,S1,1,0,0
+Proof framework,1C_L15,S1,0,0,0
+Warrant,1C_L15,S1,2,0,2
+Total,1C_L15,S1,11,4,6
+Convention,1C_L15,S10,0,0,0
+Evaluation,1C_L15,S10,1,1,1
+Example generation,1C_L15,S10,0,0,0
+Fact,1C_L15,S10,5,3,4
+Next step,1C_L15,S10,0,0,0
+Other,1C_L15,S10,0,0,0
+Proof framework,1C_L15,S10,0,0,0
+Warrant,1C_L15,S10,1,1,1
+Total,1C_L15,S10,7,5,6
+Convention,1C_L15,S11,0,0,0
+Evaluation,1C_L15,S11,0,0,0
+Example generation,1C_L15,S11,0,0,0
+Fact,1C_L15,S11,9,5,5
+Next step,1C_L15,S11,0,0,0
+Other,1C_L15,S11,0,0,0
+Proof framework,1C_L15,S11,0,0,0
+Warrant,1C_L15,S11,1,1,1
+Total,1C_L15,S11,10,6,6
+Convention,1C_L15,S2,0,0,0
+Evaluation,1C_L15,S2,0,0,0
+Example generation,1C_L15,S2,0,0,0
+Fact,1C_L15,S2,3,1,2
+Next step,1C_L15,S2,0,0,0
+Other,1C_L15,S2,0,0,0
+Proof framework,1C_L15,S2,0,0,0
+Warrant,1C_L15,S2,0,0,0
+Total,1C_L15,S2,3,1,2
+Convention,1C_L15,S3,0,0,0
+Evaluation,1C_L15,S3,2,0,2
+Example generation,1C_L15,S3,0,0,0
+Fact,1C_L15,S3,0,0,0
+Next step,1C_L15,S3,4,1,2
+Other,1C_L15,S3,0,0,0
+Proof framework,1C_L15,S3,0,0,0
+Warrant,1C_L15,S3,0,0,0
+Total,1C_L15,S3,6,1,4
+Convention,1C_L15,S4,0,0,0
+Evaluation,1C_L15,S4,0,0,0
+Example generation,1C_L15,S4,0,0,0
+Fact,1C_L15,S4,1,1,1
+Next step,1C_L15,S4,7,5,5
+Other,1C_L15,S4,0,0,0
+Proof framework,1C_L15,S4,0,0,0
+Warrant,1C_L15,S4,4,1,2
+Total,1C_L15,S4,12,7,8
+Convention,1C_L15,S5,0,0,0
+Evaluation,1C_L15,S5,3,3,3
+Example generation,1C_L15,S5,0,0,0
+Fact,1C_L15,S5,3,3,3
+Next step,1C_L15,S5,13,7,8
+Other,1C_L15,S5,0,0,0
+Proof framework,1C_L15,S5,0,0,0
+Warrant,1C_L15,S5,3,3,3
+Total,1C_L15,S5,22,16,17
+Convention,1C_L15,S6,0,0,0
+Evaluation,1C_L15,S6,3,1,2
+Example generation,1C_L15,S6,0,0,0
+Fact,1C_L15,S6,3,3,3
+Next step,1C_L15,S6,3,0,3
+Other,1C_L15,S6,2,1,1
+Proof framework,1C_L15,S6,0,0,0
+Warrant,1C_L15,S6,5,2,4
+Total,1C_L15,S6,16,7,13
+Convention,1C_L15,S7,0,0,0
+Evaluation,1C_L15,S7,4,3,3
+Example generation,1C_L15,S7,0,0,0
+Fact,1C_L15,S7,3,3,3
+Next step,1C_L15,S7,0,0,0
+Other,1C_L15,S7,2,1,2
+Proof framework,1C_L15,S7,0,0,0
+Warrant,1C_L15,S7,1,1,1
+Total,1C_L15,S7,10,8,9
+Convention,1C_L15,S8,0,0,0
+Evaluation,1C_L15,S8,1,1,1
+Example generation,1C_L15,S8,3,2,2
+Fact,1C_L15,S8,4,3,3
+Next step,1C_L15,S8,1,1,1
+Other,1C_L15,S8,0,0,0
+Proof framework,1C_L15,S8,0,0,0
+Warrant,1C_L15,S8,3,2,2
+Total,1C_L15,S8,12,9,9
+Convention,1C_L15,S9,0,0,0
+Evaluation,1C_L15,S9,0,0,0
+Example generation,1C_L15,S9,2,2,2
+Fact,1C_L15,S9,3,3,3
+Next step,1C_L15,S9,0,0,0
+Other,1C_L15,S9,0,0,0
+Proof framework,1C_L15,S9,0,0,0
+Warrant,1C_L15,S9,1,1,1
+Total,1C_L15,S9,6,6,6
+Convention,1C_L16,S1,0,0,0
+Evaluation,1C_L16,S1,0,0,0
+Example generation,1C_L16,S1,3,2,2
+Fact,1C_L16,S1,0,0,0
+Next step,1C_L16,S1,0,0,0
+Other,1C_L16,S1,0,0,0
+Proof framework,1C_L16,S1,0,0,0
+Warrant,1C_L16,S1,3,2,2
+Total,1C_L16,S1,6,4,4
+Convention,1C_L16,S10,0,0,0
+Evaluation,1C_L16,S10,10,7,7
+Example generation,1C_L16,S10,0,0,0
+Fact,1C_L16,S10,3,3,3
+Next step,1C_L16,S10,5,3,4
+Other,1C_L16,S10,0,0,0
+Proof framework,1C_L16,S10,0,0,0
+Warrant,1C_L16,S10,8,5,5
+Total,1C_L16,S10,26,18,19
+Convention,1C_L16,S11,0,0,0
+Evaluation,1C_L16,S11,15,8,10
+Example generation,1C_L16,S11,0,0,0
+Fact,1C_L16,S11,0,0,0
+Next step,1C_L16,S11,9,4,4
+Other,1C_L16,S11,0,0,0
+Proof framework,1C_L16,S11,0,0,0
+Warrant,1C_L16,S11,11,6,6
+Total,1C_L16,S11,35,18,20
+Convention,1C_L16,S12,0,0,0
+Evaluation,1C_L16,S12,4,0,4
+Example generation,1C_L16,S12,0,0,0
+Fact,1C_L16,S12,8,5,6
+Next step,1C_L16,S12,16,5,8
+Other,1C_L16,S12,0,0,0
+Proof framework,1C_L16,S12,0,0,0
+Warrant,1C_L16,S12,9,5,8
+Total,1C_L16,S12,37,15,26
+Convention,1C_L16,S13,0,0,0
+Evaluation,1C_L16,S13,6,4,4
+Example generation,1C_L16,S13,0,0,0
+Fact,1C_L16,S13,14,9,9
+Next step,1C_L16,S13,15,6,10
+Other,1C_L16,S13,8,2,3
+Proof framework,1C_L16,S13,0,0,0
+Warrant,1C_L16,S13,12,7,8
+Total,1C_L16,S13,55,28,34
+Convention,1C_L16,S14,0,0,0
+Evaluation,1C_L16,S14,1,1,1
+Example generation,1C_L16,S14,0,0,0
+Fact,1C_L16,S14,3,3,3
+Next step,1C_L16,S14,14,10,10
+Other,1C_L16,S14,0,0,0
+Proof framework,1C_L16,S14,0,0,0
+Warrant,1C_L16,S14,4,2,3
+Total,1C_L16,S14,22,16,17
+Convention,1C_L16,S15,0,0,0
+Evaluation,1C_L16,S15,0,0,0
+Example generation,1C_L16,S15,0,0,0
+Fact,1C_L16,S15,5,4,4
+Next step,1C_L16,S15,27,12,16
+Other,1C_L16,S15,0,0,0
+Proof framework,1C_L16,S15,0,0,0
+Warrant,1C_L16,S15,7,4,5
+Total,1C_L16,S15,39,20,25
+Convention,1C_L16,S2,0,0,0
+Evaluation,1C_L16,S2,3,2,2
+Example generation,1C_L16,S2,0,0,0
+Fact,1C_L16,S2,10,3,5
+Next step,1C_L16,S2,13,5,8
+Other,1C_L16,S2,0,0,0
+Proof framework,1C_L16,S2,0,0,0
+Warrant,1C_L16,S2,11,5,5
+Total,1C_L16,S2,37,15,20
+Convention,1C_L16,S3,0,0,0
+Evaluation,1C_L16,S3,2,0,2
+Example generation,1C_L16,S3,0,0,0
+Fact,1C_L16,S3,16,8,11
+Next step,1C_L16,S3,17,4,9
+Other,1C_L16,S3,0,0,0
+Proof framework,1C_L16,S3,0,0,0
+Warrant,1C_L16,S3,10,5,6
+Total,1C_L16,S3,45,17,28
+Convention,1C_L16,S4,0,0,0
+Evaluation,1C_L16,S4,0,0,0
+Example generation,1C_L16,S4,0,0,0
+Fact,1C_L16,S4,5,1,3
+Next step,1C_L16,S4,45,15,24
+Other,1C_L16,S4,0,0,0
+Proof framework,1C_L16,S4,1,0,1
+Warrant,1C_L16,S4,3,1,2
+Total,1C_L16,S4,54,17,30
+Convention,1C_L16,S5,0,0,0
+Evaluation,1C_L16,S5,0,0,0
+Example generation,1C_L16,S5,0,0,0
+Fact,1C_L16,S5,16,9,11
+Next step,1C_L16,S5,14,5,7
+Other,1C_L16,S5,0,0,0
+Proof framework,1C_L16,S5,0,0,0
+Warrant,1C_L16,S5,13,6,9
+Total,1C_L16,S5,43,20,27
+Convention,1C_L16,S6,0,0,0
+Evaluation,1C_L16,S6,8,2,2
+Example generation,1C_L16,S6,0,0,0
+Fact,1C_L16,S6,0,0,0
+Next step,1C_L16,S6,8,3,4
+Other,1C_L16,S6,0,0,0
+Proof framework,1C_L16,S6,0,0,0
+Warrant,1C_L16,S6,7,4,4
+Total,1C_L16,S6,23,9,10
+Convention,1C_L16,S7,0,0,0
+Evaluation,1C_L16,S7,0,0,0
+Example generation,1C_L16,S7,0,0,0
+Fact,1C_L16,S7,3,3,3
+Next step,1C_L16,S7,9,5,5
+Other,1C_L16,S7,0,0,0
+Proof framework,1C_L16,S7,0,0,0
+Warrant,1C_L16,S7,7,5,5
+Total,1C_L16,S7,19,13,13
+Convention,1C_L16,S8,0,0,0
+Evaluation,1C_L16,S8,2,1,2
+Example generation,1C_L16,S8,0,0,0
+Fact,1C_L16,S8,14,5,6
+Next step,1C_L16,S8,0,0,0
+Other,1C_L16,S8,0,0,0
+Proof framework,1C_L16,S8,0,0,0
+Warrant,1C_L16,S8,15,8,8
+Total,1C_L16,S8,31,14,16
+Convention,1C_L16,S9,0,0,0
+Evaluation,1C_L16,S9,13,6,8
+Example generation,1C_L16,S9,2,1,1
+Fact,1C_L16,S9,24,9,9
+Next step,1C_L16,S9,0,0,0
+Other,1C_L16,S9,0,0,0
+Proof framework,1C_L16,S9,0,0,0
+Warrant,1C_L16,S9,17,6,7
+Total,1C_L16,S9,56,22,25
+Convention,1C_L17,S1,0,0,0
+Evaluation,1C_L17,S1,2,2,2
+Example generation,1C_L17,S1,0,0,0
+Fact,1C_L17,S1,10,4,6
+Next step,1C_L17,S1,9,6,6
+Other,1C_L17,S1,0,0,0
+Proof framework,1C_L17,S1,0,0,0
+Warrant,1C_L17,S1,2,1,1
+Total,1C_L17,S1,23,13,15
+Convention,1C_L17,S10,0,0,0
+Evaluation,1C_L17,S10,2,1,2
+Example generation,1C_L17,S10,0,0,0
+Fact,1C_L17,S10,1,1,1
+Next step,1C_L17,S10,3,2,3
+Other,1C_L17,S10,1,0,1
+Proof framework,1C_L17,S10,0,0,0
+Warrant,1C_L17,S10,8,5,7
+Total,1C_L17,S10,15,9,14
+Convention,1C_L17,S2,0,0,0
+Evaluation,1C_L17,S2,5,3,3
+Example generation,1C_L17,S2,4,2,3
+Fact,1C_L17,S2,5,3,3
+Next step,1C_L17,S2,10,8,8
+Other,1C_L17,S2,0,0,0
+Proof framework,1C_L17,S2,0,0,0
+Warrant,1C_L17,S2,1,1,1
+Total,1C_L17,S2,25,17,18
+Convention,1C_L17,S3,0,0,0
+Evaluation,1C_L17,S3,5,4,4
+Example generation,1C_L17,S3,0,0,0
+Fact,1C_L17,S3,1,1,1
+Next step,1C_L17,S3,13,9,12
+Other,1C_L17,S3,0,0,0
+Proof framework,1C_L17,S3,0,0,0
+Warrant,1C_L17,S3,5,4,5
+Total,1C_L17,S3,24,18,22
+Convention,1C_L17,S4,0,0,0
+Evaluation,1C_L17,S4,5,5,5
+Example generation,1C_L17,S4,0,0,0
+Fact,1C_L17,S4,3,1,1
+Next step,1C_L17,S4,8,3,5
+Other,1C_L17,S4,3,1,3
+Proof framework,1C_L17,S4,2,2,2
+Warrant,1C_L17,S4,2,1,1
+Total,1C_L17,S4,23,13,17
+Convention,1C_L17,S5,0,0,0
+Evaluation,1C_L17,S5,7,3,4
+Example generation,1C_L17,S5,1,1,1
+Fact,1C_L17,S5,2,1,2
+Next step,1C_L17,S5,12,7,10
+Other,1C_L17,S5,0,0,0
+Proof framework,1C_L17,S5,1,1,1
+Warrant,1C_L17,S5,2,2,2
+Total,1C_L17,S5,25,15,20
+Convention,1C_L17,S6,0,0,0
+Evaluation,1C_L17,S6,11,8,8
+Example generation,1C_L17,S6,0,0,0
+Fact,1C_L17,S6,0,0,0
+Next step,1C_L17,S6,1,1,1
+Other,1C_L17,S6,0,0,0
+Proof framework,1C_L17,S6,0,0,0
+Warrant,1C_L17,S6,1,1,1
+Total,1C_L17,S6,13,10,10
+Convention,1C_L17,S7,0,0,0
+Evaluation,1C_L17,S7,3,1,1
+Example generation,1C_L17,S7,0,0,0
+Fact,1C_L17,S7,0,0,0
+Next step,1C_L17,S7,3,1,2
+Other,1C_L17,S7,0,0,0
+Proof framework,1C_L17,S7,0,0,0
+Warrant,1C_L17,S7,0,0,0
+Total,1C_L17,S7,6,2,3
+Convention,1C_L17,S8,0,0,0
+Evaluation,1C_L17,S8,2,0,0
+Example generation,1C_L17,S8,0,0,0
+Fact,1C_L17,S8,2,1,1
+Next step,1C_L17,S8,3,3,3
+Other,1C_L17,S8,0,0,0
+Proof framework,1C_L17,S8,0,0,0
+Warrant,1C_L17,S8,1,1,1
+Total,1C_L17,S8,8,5,5
+Convention,1C_L17,S9,0,0,0
+Evaluation,1C_L17,S9,2,1,2
+Example generation,1C_L17,S9,0,0,0
+Fact,1C_L17,S9,0,0,0
+Next step,1C_L17,S9,1,1,1
+Other,1C_L17,S9,0,0,0
+Proof framework,1C_L17,S9,0,0,0
+Warrant,1C_L17,S9,5,3,4
+Total,1C_L17,S9,8,5,7
+Convention,1C_L5,S1,0,0,0
+Evaluation,1C_L5,S1,0,0,0
+Example generation,1C_L5,S1,0,0,0
+Fact,1C_L5,S1,0,0,0
+Next step,1C_L5,S1,0,0,0
+Other,1C_L5,S1,0,0,0
+Proof framework,1C_L5,S1,0,0,0
+Warrant,1C_L5,S1,4,3,3
+Total,1C_L5,S1,4,3,3
+Convention,1C_L5,S2,0,0,0
+Evaluation,1C_L5,S2,0,0,0
+Example generation,1C_L5,S2,0,0,0
+Fact,1C_L5,S2,2,1,1
+Next step,1C_L5,S2,0,0,0
+Other,1C_L5,S2,0,0,0
+Proof framework,1C_L5,S2,0,0,0
+Warrant,1C_L5,S2,2,1,1
+Total,1C_L5,S2,4,2,2
+Convention,1C_L5,S3,0,0,0
+Evaluation,1C_L5,S3,0,0,0
+Example generation,1C_L5,S3,0,0,0
+Fact,1C_L5,S3,0,0,0
+Next step,1C_L5,S3,0,0,0
+Other,1C_L5,S3,0,0,0
+Proof framework,1C_L5,S3,0,0,0
+Warrant,1C_L5,S3,0,0,0
+Total,1C_L5,S3,0,0,0
+Convention,1C_L5,S4,0,0,0
+Evaluation,1C_L5,S4,0,0,0
+Example generation,1C_L5,S4,0,0,0
+Fact,1C_L5,S4,3,2,2
+Next step,1C_L5,S4,0,0,0
+Other,1C_L5,S4,0,0,0
+Proof framework,1C_L5,S4,0,0,0
+Warrant,1C_L5,S4,0,0,0
+Total,1C_L5,S4,3,2,2
+Convention,1D_L17,S1,0,0,0
+Evaluation,1D_L17,S1,6,4,4
+Example generation,1D_L17,S1,0,0,0
+Fact,1D_L17,S1,4,1,2
+Next step,1D_L17,S1,7,3,6
+Other,1D_L17,S1,5,1,1
+Proof framework,1D_L17,S1,0,0,0
+Warrant,1D_L17,S1,4,3,3
+Total,1D_L17,S1,26,12,16
+Convention,1D_L17,S2,0,0,0
+Evaluation,1D_L17,S2,7,3,4
+Example generation,1D_L17,S2,0,0,0
+Fact,1D_L17,S2,0,0,0
+Next step,1D_L17,S2,14,8,8
+Other,1D_L17,S2,0,0,0
+Proof framework,1D_L17,S2,0,0,0
+Warrant,1D_L17,S2,5,2,4
+Total,1D_L17,S2,26,13,16
+Convention,1D_L17,S3,0,0,0
+Evaluation,1D_L17,S3,1,0,1
+Example generation,1D_L17,S3,0,0,0
+Fact,1D_L17,S3,3,1,1
+Next step,1D_L17,S3,2,0,1
+Other,1D_L17,S3,0,0,0
+Proof framework,1D_L17,S3,0,0,0
+Warrant,1D_L17,S3,0,0,0
+Total,1D_L17,S3,6,1,3
+Convention,1D_L17,S4,0,0,0
+Evaluation,1D_L17,S4,4,3,3
+Example generation,1D_L17,S4,0,0,0
+Fact,1D_L17,S4,3,1,2
+Next step,1D_L17,S4,5,3,5
+Other,1D_L17,S4,1,0,1
+Proof framework,1D_L17,S4,0,0,0
+Warrant,1D_L17,S4,0,0,0
+Total,1D_L17,S4,13,7,11
+Convention,1D_L21,S1,0,0,0
+Evaluation,1D_L21,S1,0,0,0
+Example generation,1D_L21,S1,0,0,0
+Fact,1D_L21,S1,12,5,6
+Next step,1D_L21,S1,0,0,0
+Other,1D_L21,S1,0,0,0
+Proof framework,1D_L21,S1,0,0,0
+Warrant,1D_L21,S1,2,2,2
+Total,1D_L21,S1,14,7,8
+Convention,1D_L21,S2,0,0,0
+Evaluation,1D_L21,S2,0,0,0
+Example generation,1D_L21,S2,0,0,0
+Fact,1D_L21,S2,3,2,3
+Next step,1D_L21,S2,3,1,2
+Other,1D_L21,S2,0,0,0
+Proof framework,1D_L21,S2,0,0,0
+Warrant,1D_L21,S2,0,0,0
+Total,1D_L21,S2,6,3,5
+Convention,1D_L21,S3,0,0,0
+Evaluation,1D_L21,S3,0,0,0
+Example generation,1D_L21,S3,0,0,0
+Fact,1D_L21,S3,6,0,3
+Next step,1D_L21,S3,0,0,0
+Other,1D_L21,S3,0,0,0
+Proof framework,1D_L21,S3,0,0,0
+Warrant,1D_L21,S3,0,0,0
+Total,1D_L21,S3,6,0,3
+Convention,1D_L21,S4,0,0,0
+Evaluation,1D_L21,S4,1,0,0
+Example generation,1D_L21,S4,5,5,5
+Fact,1D_L21,S4,2,1,1
+Next step,1D_L21,S4,11,7,8
+Other,1D_L21,S4,0,0,0
+Proof framework,1D_L21,S4,0,0,0
+Warrant,1D_L21,S4,0,0,0
+Total,1D_L21,S4,19,13,14
+Convention,1E_L18,S1,0,0,0
+Evaluation,1E_L18,S1,0,0,0
+Example generation,1E_L18,S1,0,0,0
+Fact,1E_L18,S1,1,1,1
+Next step,1E_L18,S1,1,0,0
+Other,1E_L18,S1,0,0,0
+Proof framework,1E_L18,S1,0,0,0
+Warrant,1E_L18,S1,1,1,1
+Total,1E_L18,S1,3,2,2
+Convention,1E_L18,S2,0,0,0
+Evaluation,1E_L18,S2,0,0,0
+Example generation,1E_L18,S2,0,0,0
+Fact,1E_L18,S2,3,1,1
+Next step,1E_L18,S2,0,0,0
+Other,1E_L18,S2,0,0,0
+Proof framework,1E_L18,S2,0,0,0
+Warrant,1E_L18,S2,1,1,1
+Total,1E_L18,S2,4,2,2
+Convention,1E_L18,S3,0,0,0
+Evaluation,1E_L18,S3,0,0,0
+Example generation,1E_L18,S3,0,0,0
+Fact,1E_L18,S3,0,0,0
+Next step,1E_L18,S3,0,0,0
+Other,1E_L18,S3,0,0,0
+Proof framework,1E_L18,S3,0,0,0
+Warrant,1E_L18,S3,0,0,0
+Total,1E_L18,S3,0,0,0
+Convention,1E_L18,S4,0,0,0
+Evaluation,1E_L18,S4,0,0,0
+Example generation,1E_L18,S4,0,0,0
+Fact,1E_L18,S4,0,0,0
+Next step,1E_L18,S4,0,0,0
+Other,1E_L18,S4,0,0,0
+Proof framework,1E_L18,S4,0,0,0
+Warrant,1E_L18,S4,0,0,0
+Total,1E_L18,S4,0,0,0
+Convention,1E_L19,S1,0,0,0
+Evaluation,1E_L19,S1,5,3,4
+Example generation,1E_L19,S1,0,0,0
+Fact,1E_L19,S1,31,12,24
+Next step,1E_L19,S1,3,1,2
+Other,1E_L19,S1,0,0,0
+Proof framework,1E_L19,S1,0,0,0
+Warrant,1E_L19,S1,0,0,0
+Total,1E_L19,S1,39,16,30
+Convention,1E_L19,S2,0,0,0
+Evaluation,1E_L19,S2,2,1,1
+Example generation,1E_L19,S2,0,0,0
+Fact,1E_L19,S2,17,8,10
+Next step,1E_L19,S2,9,3,4
+Other,1E_L19,S2,0,0,0
+Proof framework,1E_L19,S2,0,0,0
+Warrant,1E_L19,S2,1,0,1
+Total,1E_L19,S2,29,12,16
+Convention,1E_L19,S3,0,0,0
+Evaluation,1E_L19,S3,0,0,0
+Example generation,1E_L19,S3,0,0,0
+Fact,1E_L19,S3,19,10,12
+Next step,1E_L19,S3,3,1,3
+Other,1E_L19,S3,0,0,0
+Proof framework,1E_L19,S3,0,0,0
+Warrant,1E_L19,S3,0,0,0
+Total,1E_L19,S3,22,11,15
+Convention,1E_L19,S4,0,0,0
+Evaluation,1E_L19,S4,4,2,3
+Example generation,1E_L19,S4,0,0,0
+Fact,1E_L19,S4,23,17,20
+Next step,1E_L19,S4,0,0,0
+Other,1E_L19,S4,0,0,0
+Proof framework,1E_L19,S4,0,0,0
+Warrant,1E_L19,S4,0,0,0
+Total,1E_L19,S4,27,19,23
+Convention,1F_L14,S1,1,0,1
+Evaluation,1F_L14,S1,1,1,1
+Example generation,1F_L14,S1,0,0,0
+Fact,1F_L14,S1,14,6,9
+Next step,1F_L14,S1,4,2,4
+Other,1F_L14,S1,2,1,1
+Proof framework,1F_L14,S1,0,0,0
+Warrant,1F_L14,S1,4,3,3
+Total,1F_L14,S1,26,13,19
+Convention,1F_L14,S2,0,0,0
+Evaluation,1F_L14,S2,2,0,2
+Example generation,1F_L14,S2,0,0,0
+Fact,1F_L14,S2,11,8,10
+Next step,1F_L14,S2,0,0,0
+Other,1F_L14,S2,2,2,2
+Proof framework,1F_L14,S2,0,0,0
+Warrant,1F_L14,S2,10,5,10
+Total,1F_L14,S2,25,15,24
+Convention,1F_L14,S3,0,0,0
+Evaluation,1F_L14,S3,6,5,5
+Example generation,1F_L14,S3,0,0,0
+Fact,1F_L14,S3,24,6,12
+Next step,1F_L14,S3,9,2,4
+Other,1F_L14,S3,0,0,0
+Proof framework,1F_L14,S3,0,0,0
+Warrant,1F_L14,S3,8,5,6
+Total,1F_L14,S3,47,18,27
+Convention,1F_L14,S4,0,0,0
+Evaluation,1F_L14,S4,2,0,1
+Example generation,1F_L14,S4,3,1,1
+Fact,1F_L14,S4,15,8,9
+Next step,1F_L14,S4,3,2,2
+Other,1F_L14,S4,5,3,3
+Proof framework,1F_L14,S4,0,0,0
+Warrant,1F_L14,S4,8,6,7
+Total,1F_L14,S4,36,20,23
+Convention,2A_L22,S1,0,0,0
+Evaluation,2A_L22,S1,1,0,1
+Example generation,2A_L22,S1,0,0,0
+Fact,2A_L22,S1,2,1,2
+Next step,2A_L22,S1,0,0,0
+Other,2A_L22,S1,0,0,0
+Proof framework,2A_L22,S1,0,0,0
+Warrant,2A_L22,S1,1,1,1
+Total,2A_L22,S1,4,2,4
+Convention,2A_L22,S2,0,0,0
+Evaluation,2A_L22,S2,0,0,0
+Example generation,2A_L22,S2,0,0,0
+Fact,2A_L22,S2,7,3,5
+Next step,2A_L22,S2,0,0,0
+Other,2A_L22,S2,0,0,0
+Proof framework,2A_L22,S2,0,0,0
+Warrant,2A_L22,S2,2,2,2
+Total,2A_L22,S2,9,5,7
+Convention,2A_L22,S3,0,0,0
+Evaluation,2A_L22,S3,7,4,6
+Example generation,2A_L22,S3,8,5,6
+Fact,2A_L22,S3,8,3,5
+Next step,2A_L22,S3,3,2,2
+Other,2A_L22,S3,0,0,0
+Proof framework,2A_L22,S3,0,0,0
+Warrant,2A_L22,S3,4,2,4
+Total,2A_L22,S3,30,16,23
+Convention,2A_L22,S4,0,0,0
+Evaluation,2A_L22,S4,3,1,1
+Example generation,2A_L22,S4,0,0,0
+Fact,2A_L22,S4,3,1,3
+Next step,2A_L22,S4,0,0,0
+Other,2A_L22,S4,0,0,0
+Proof framework,2A_L22,S4,0,0,0
+Warrant,2A_L22,S4,0,0,0
+Total,2A_L22,S4,6,2,4
+Convention,2B_L10,S1,0,0,0
+Evaluation,2B_L10,S1,0,0,0
+Example generation,2B_L10,S1,0,0,0
+Fact,2B_L10,S1,7,6,6
+Next step,2B_L10,S1,12,7,11
+Other,2B_L10,S1,0,0,0
+Proof framework,2B_L10,S1,3,3,3
+Warrant,2B_L10,S1,1,1,1
+Total,2B_L10,S1,23,17,21
+Convention,2B_L10,S2,0,0,0
+Evaluation,2B_L10,S2,0,0,0
+Example generation,2B_L10,S2,2,1,1
+Fact,2B_L10,S2,1,1,1
+Next step,2B_L10,S2,15,5,11
+Other,2B_L10,S2,0,0,0
+Proof framework,2B_L10,S2,0,0,0
+Warrant,2B_L10,S2,7,4,7
+Total,2B_L10,S2,25,11,20
+Convention,2B_L10,S3,0,0,0
+Evaluation,2B_L10,S3,0,0,0
+Example generation,2B_L10,S3,0,0,0
+Fact,2B_L10,S3,9,4,7
+Next step,2B_L10,S3,12,6,10
+Other,2B_L10,S3,0,0,0
+Proof framework,2B_L10,S3,0,0,0
+Warrant,2B_L10,S3,2,2,2
+Total,2B_L10,S3,23,12,19
+Convention,2B_L10,S4,0,0,0
+Evaluation,2B_L10,S4,0,0,0
+Example generation,2B_L10,S4,0,0,0
+Fact,2B_L10,S4,2,2,2
+Next step,2B_L10,S4,6,2,5
+Other,2B_L10,S4,0,0,0
+Proof framework,2B_L10,S4,0,0,0
+Warrant,2B_L10,S4,11,6,6
+Total,2B_L10,S4,19,10,13
+Convention,2B_L8,S1,0,0,0
+Evaluation,2B_L8,S1,0,0,0
+Example generation,2B_L8,S1,0,0,0
+Fact,2B_L8,S1,2,2,2
+Next step,2B_L8,S1,2,1,1
+Other,2B_L8,S1,0,0,0
+Proof framework,2B_L8,S1,1,1,1
+Warrant,2B_L8,S1,0,0,0
+Total,2B_L8,S1,5,4,4
+Convention,2B_L8,S2,0,0,0
+Evaluation,2B_L8,S2,1,0,1
+Example generation,2B_L8,S2,2,1,2
+Fact,2B_L8,S2,1,1,1
+Next step,2B_L8,S2,0,0,0
+Other,2B_L8,S2,0,0,0
+Proof framework,2B_L8,S2,0,0,0
+Warrant,2B_L8,S2,0,0,0
+Total,2B_L8,S2,4,2,4
+Convention,2B_L8,S3,0,0,0
+Evaluation,2B_L8,S3,0,0,0
+Example generation,2B_L8,S3,0,0,0
+Fact,2B_L8,S3,1,0,1
+Next step,2B_L8,S3,1,1,1
+Other,2B_L8,S3,0,0,0
+Proof framework,2B_L8,S3,0,0,0
+Warrant,2B_L8,S3,0,0,0
+Total,2B_L8,S3,2,1,2
+Convention,2B_L8,S4,0,0,0
+Evaluation,2B_L8,S4,0,0,0
+Example generation,2B_L8,S4,0,0,0
+Fact,2B_L8,S4,1,1,1
+Next step,2B_L8,S4,0,0,0
+Other,2B_L8,S4,0,0,0
+Proof framework,2B_L8,S4,0,0,0
+Warrant,2B_L8,S4,0,0,0
+Total,2B_L8,S4,1,1,1
+Convention,2B_L9,S1,0,0,0
+Evaluation,2B_L9,S1,0,0,0
+Example generation,2B_L9,S1,0,0,0
+Fact,2B_L9,S1,0,0,0
+Next step,2B_L9,S1,0,0,0
+Other,2B_L9,S1,0,0,0
+Proof framework,2B_L9,S1,0,0,0
+Warrant,2B_L9,S1,0,0,0
+Total,2B_L9,S1,0,0,0
+Convention,2B_L9,S2,0,0,0
+Evaluation,2B_L9,S2,7,1,4
+Example generation,2B_L9,S2,0,0,0
+Fact,2B_L9,S2,0,0,0
+Next step,2B_L9,S2,0,0,0
+Other,2B_L9,S2,0,0,0
+Proof framework,2B_L9,S2,0,0,0
+Warrant,2B_L9,S2,1,1,1
+Total,2B_L9,S2,8,2,5
+Convention,2B_L9,S3,0,0,0
+Evaluation,2B_L9,S3,0,0,0
+Example generation,2B_L9,S3,0,0,0
+Fact,2B_L9,S3,0,0,0
+Next step,2B_L9,S3,0,0,0
+Other,2B_L9,S3,0,0,0
+Proof framework,2B_L9,S3,0,0,0
+Warrant,2B_L9,S3,0,0,0
+Total,2B_L9,S3,0,0,0
+Convention,2B_L9,S4,0,0,0
+Evaluation,2B_L9,S4,0,0,0
+Example generation,2B_L9,S4,0,0,0
+Fact,2B_L9,S4,0,0,0
+Next step,2B_L9,S4,0,0,0
+Other,2B_L9,S4,0,0,0
+Proof framework,2B_L9,S4,0,0,0
+Warrant,2B_L9,S4,0,0,0
+Total,2B_L9,S4,0,0,0
+Convention,2C_L23,S1,0,0,0
+Evaluation,2C_L23,S1,0,0,0
+Example generation,2C_L23,S1,0,0,0
+Fact,2C_L23,S1,1,1,1
+Next step,2C_L23,S1,1,1,1
+Other,2C_L23,S1,0,0,0
+Proof framework,2C_L23,S1,0,0,0
+Warrant,2C_L23,S1,0,0,0
+Total,2C_L23,S1,2,2,2
+Convention,2C_L23,S2,0,0,0
+Evaluation,2C_L23,S2,0,0,0
+Example generation,2C_L23,S2,0,0,0
+Fact,2C_L23,S2,0,0,0
+Next step,2C_L23,S2,0,0,0
+Other,2C_L23,S2,0,0,0
+Proof framework,2C_L23,S2,0,0,0
+Warrant,2C_L23,S2,0,0,0
+Total,2C_L23,S2,0,0,0
+Convention,2C_L23,S3,0,0,0
+Evaluation,2C_L23,S3,0,0,0
+Example generation,2C_L23,S3,0,0,0
+Fact,2C_L23,S3,1,0,0
+Next step,2C_L23,S3,0,0,0
+Other,2C_L23,S3,0,0,0
+Proof framework,2C_L23,S3,0,0,0
+Warrant,2C_L23,S3,0,0,0
+Total,2C_L23,S3,1,0,0
+Convention,2C_L23,S4,0,0,0
+Evaluation,2C_L23,S4,0,0,0
+Example generation,2C_L23,S4,0,0,0
+Fact,2C_L23,S4,0,0,0
+Next step,2C_L23,S4,0,0,0
+Other,2C_L23,S4,0,0,0
+Proof framework,2C_L23,S4,0,0,0
+Warrant,2C_L23,S4,1,1,1
+Total,2C_L23,S4,1,1,1
+Convention,2D_L24,S1,0,0,0
+Evaluation,2D_L24,S1,0,0,0
+Example generation,2D_L24,S1,0,0,0
+Fact,2D_L24,S1,0,0,0
+Next step,2D_L24,S1,0,0,0
+Other,2D_L24,S1,0,0,0
+Proof framework,2D_L24,S1,0,0,0
+Warrant,2D_L24,S1,0,0,0
+Total,2D_L24,S1,0,0,0
+Convention,2D_L24,S2,0,0,0
+Evaluation,2D_L24,S2,0,0,0
+Example generation,2D_L24,S2,0,0,0
+Fact,2D_L24,S2,0,0,0
+Next step,2D_L24,S2,0,0,0
+Other,2D_L24,S2,0,0,0
+Proof framework,2D_L24,S2,0,0,0
+Warrant,2D_L24,S2,0,0,0
+Total,2D_L24,S2,0,0,0
+Convention,2D_L24,S3,0,0,0
+Evaluation,2D_L24,S3,0,0,0
+Example generation,2D_L24,S3,0,0,0
+Fact,2D_L24,S3,0,0,0
+Next step,2D_L24,S3,2,1,1
+Other,2D_L24,S3,1,0,0
+Proof framework,2D_L24,S3,0,0,0
+Warrant,2D_L24,S3,0,0,0
+Total,2D_L24,S3,3,1,1
+Convention,2D_L24,S4,0,0,0
+Evaluation,2D_L24,S4,0,0,0
+Example generation,2D_L24,S4,0,0,0
+Fact,2D_L24,S4,0,0,0
+Next step,2D_L24,S4,0,0,0
+Other,2D_L24,S4,0,0,0
+Proof framework,2D_L24,S4,0,0,0
+Warrant,2D_L24,S4,0,0,0
+Total,2D_L24,S4,0,0,0
+Convention,3A_L11,S1,0,0,0
+Evaluation,3A_L11,S1,0,0,0
+Example generation,3A_L11,S1,7,3,3
+Fact,3A_L11,S1,1,1,1
+Next step,3A_L11,S1,0,0,0
+Other,3A_L11,S1,2,1,2
+Proof framework,3A_L11,S1,0,0,0
+Warrant,3A_L11,S1,2,0,1
+Total,3A_L11,S1,12,5,7
+Convention,3A_L11,S2,0,0,0
+Evaluation,3A_L11,S2,10,5,6
+Example generation,3A_L11,S2,4,3,4
+Fact,3A_L11,S2,5,2,4
+Next step,3A_L11,S2,0,0,0
+Other,3A_L11,S2,0,0,0
+Proof framework,3A_L11,S2,0,0,0
+Warrant,3A_L11,S2,0,0,0
+Total,3A_L11,S2,19,10,14
+Convention,3A_L11,S3,0,0,0
+Evaluation,3A_L11,S3,0,0,0
+Example generation,3A_L11,S3,5,3,3
+Fact,3A_L11,S3,0,0,0
+Next step,3A_L11,S3,0,0,0
+Other,3A_L11,S3,0,0,0
+Proof framework,3A_L11,S3,0,0,0
+Warrant,3A_L11,S3,0,0,0
+Total,3A_L11,S3,5,3,3
+Convention,3A_L11,S4,0,0,0
+Evaluation,3A_L11,S4,0,0,0
+Example generation,3A_L11,S4,0,0,0
+Fact,3A_L11,S4,0,0,0
+Next step,3A_L11,S4,0,0,0
+Other,3A_L11,S4,1,1,1
+Proof framework,3A_L11,S4,0,0,0
+Warrant,3A_L11,S4,0,0,0
+Total,3A_L11,S4,1,1,1
+Convention,3B_L12,S1,0,0,0
+Evaluation,3B_L12,S1,0,0,0
+Example generation,3B_L12,S1,0,0,0
+Fact,3B_L12,S1,0,0,0
+Next step,3B_L12,S1,0,0,0
+Other,3B_L12,S1,0,0,0
+Proof framework,3B_L12,S1,0,0,0
+Warrant,3B_L12,S1,1,1,1
+Total,3B_L12,S1,1,1,1
+Convention,3B_L12,S2,0,0,0
+Evaluation,3B_L12,S2,0,0,0
+Example generation,3B_L12,S2,0,0,0
+Fact,3B_L12,S2,0,0,0
+Next step,3B_L12,S2,0,0,0
+Other,3B_L12,S2,0,0,0
+Proof framework,3B_L12,S2,0,0,0
+Warrant,3B_L12,S2,0,0,0
+Total,3B_L12,S2,0,0,0
+Convention,3B_L12,S3,0,0,0
+Evaluation,3B_L12,S3,0,0,0
+Example generation,3B_L12,S3,0,0,0
+Fact,3B_L12,S3,0,0,0
+Next step,3B_L12,S3,0,0,0
+Other,3B_L12,S3,0,0,0
+Proof framework,3B_L12,S3,0,0,0
+Warrant,3B_L12,S3,0,0,0
+Total,3B_L12,S3,0,0,0
+Convention,3B_L12,S4,0,0,0
+Evaluation,3B_L12,S4,0,0,0
+Example generation,3B_L12,S4,0,0,0
+Fact,3B_L12,S4,0,0,0
+Next step,3B_L12,S4,0,0,0
+Other,3B_L12,S4,0,0,0
+Proof framework,3B_L12,S4,0,0,0
+Warrant,3B_L12,S4,0,0,0
+Total,3B_L12,S4,0,0,0
+Convention,3C_L13,S1,0,0,0
+Evaluation,3C_L13,S1,1,1,1
+Example generation,3C_L13,S1,0,0,0
+Fact,3C_L13,S1,3,0,3
+Next step,3C_L13,S1,0,0,0
+Other,3C_L13,S1,0,0,0
+Proof framework,3C_L13,S1,0,0,0
+Warrant,3C_L13,S1,1,1,1
+Total,3C_L13,S1,5,2,5
+Convention,3C_L13,S2,0,0,0
+Evaluation,3C_L13,S2,0,0,0
+Example generation,3C_L13,S2,0,0,0
+Fact,3C_L13,S2,2,1,2
+Next step,3C_L13,S2,0,0,0
+Other,3C_L13,S2,0,0,0
+Proof framework,3C_L13,S2,0,0,0
+Warrant,3C_L13,S2,0,0,0
+Total,3C_L13,S2,2,1,2
+Convention,3C_L13,S3,0,0,0
+Evaluation,3C_L13,S3,5,1,4
+Example generation,3C_L13,S3,0,0,0
+Fact,3C_L13,S3,5,2,5
+Next step,3C_L13,S3,0,0,0
+Other,3C_L13,S3,0,0,0
+Proof framework,3C_L13,S3,0,0,0
+Warrant,3C_L13,S3,0,0,0
+Total,3C_L13,S3,10,3,9
+Convention,3C_L13,S4,0,0,0
+Evaluation,3C_L13,S4,1,1,1
+Example generation,3C_L13,S4,0,0,0
+Fact,3C_L13,S4,7,4,5
+Next step,3C_L13,S4,7,3,5
+Other,3C_L13,S4,0,0,0
+Proof framework,3C_L13,S4,0,0,0
+Warrant,3C_L13,S4,0,0,0
+Total,3C_L13,S4,15,8,11
+Convention,3D_L20,S1,0,0,0
+Evaluation,3D_L20,S1,0,0,0
+Example generation,3D_L20,S1,0,0,0
+Fact,3D_L20,S1,1,1,1
+Next step,3D_L20,S1,0,0,0
+Other,3D_L20,S1,0,0,0
+Proof framework,3D_L20,S1,0,0,0
+Warrant,3D_L20,S1,0,0,0
+Total,3D_L20,S1,1,1,1
+Convention,3D_L20,S2,0,0,0
+Evaluation,3D_L20,S2,0,0,0
+Example generation,3D_L20,S2,0,0,0
+Fact,3D_L20,S2,2,1,1
+Next step,3D_L20,S2,0,0,0
+Other,3D_L20,S2,0,0,0
+Proof framework,3D_L20,S2,0,0,0
+Warrant,3D_L20,S2,0,0,0
+Total,3D_L20,S2,2,1,1
+Convention,3D_L20,S3,0,0,0
+Evaluation,3D_L20,S3,0,0,0
+Example generation,3D_L20,S3,0,0,0
+Fact,3D_L20,S3,0,0,0
+Next step,3D_L20,S3,2,2,2
+Other,3D_L20,S3,0,0,0
+Proof framework,3D_L20,S3,0,0,0
+Warrant,3D_L20,S3,0,0,0
+Total,3D_L20,S3,2,2,2
+Convention,3D_L20,S4,0,0,0
+Evaluation,3D_L20,S4,0,0,0
+Example generation,3D_L20,S4,0,0,0
+Fact,3D_L20,S4,0,0,0
+Next step,3D_L20,S4,0,0,0
+Other,3D_L20,S4,0,0,0
+Proof framework,3D_L20,S4,0,0,0
+Warrant,3D_L20,S4,0,0,0
+Total,3D_L20,S4,0,0,0
+Convention,4A_L10,S1,0,0,0
+Evaluation,4A_L10,S1,0,0,0
+Example generation,4A_L10,S1,0,0,0
+Fact,4A_L10,S1,9,9,9
+Next step,4A_L10,S1,6,5,6
+Other,4A_L10,S1,0,0,0
+Proof framework,4A_L10,S1,0,0,0
+Warrant,4A_L10,S1,1,1,1
+Total,4A_L10,S1,16,15,16
+Convention,4A_L10,S2,0,0,0
+Evaluation,4A_L10,S2,1,1,1
+Example generation,4A_L10,S2,0,0,0
+Fact,4A_L10,S2,16,11,16
+Next step,4A_L10,S2,8,4,6
+Other,4A_L10,S2,0,0,0
+Proof framework,4A_L10,S2,0,0,0
+Warrant,4A_L10,S2,7,5,7
+Total,4A_L10,S2,32,21,30
+Convention,4A_L10,S3,0,0,0
+Evaluation,4A_L10,S3,1,1,1
+Example generation,4A_L10,S3,0,0,0
+Fact,4A_L10,S3,14,11,11
+Next step,4A_L10,S3,7,6,7
+Other,4A_L10,S3,0,0,0
+Proof framework,4A_L10,S3,0,0,0
+Warrant,4A_L10,S3,0,0,0
+Total,4A_L10,S3,22,18,19
+Convention,4A_L10,S4,0,0,0
+Evaluation,4A_L10,S4,0,0,0
+Example generation,4A_L10,S4,0,0,0
+Fact,4A_L10,S4,2,2,2
+Next step,4A_L10,S4,6,3,5
+Other,4A_L10,S4,1,1,1
+Proof framework,4A_L10,S4,0,0,0
+Warrant,4A_L10,S4,3,2,3
+Total,4A_L10,S4,12,8,11
