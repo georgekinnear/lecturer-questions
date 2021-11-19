@@ -1,0 +1,401 @@
+---
+title: "Lecturer Questions: Question clusters"
+author: "George Kinnear"
+date: "17/11/2021"
+output: 
+  html_document:
+    code_folding: hide
+    df_print: paged
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+
+# Tables
+library(knitr)
+library(kableExtra)
+basic_kable = function(df, ...) {
+  df %>% 
+    kable(...) %>%
+    kable_styling(bootstrap_options = "striped", full_width = F)
+}
+
+# Plot styling
+theme_set(theme_minimal())
+```
+
+```{r read-data, message=FALSE, warning=FALSE}
+all_qs_all_lecs <- read_csv("data/ANON_LQ_Maths_All.csv")
+anon_courses <- read_csv("data/ANON_courses.csv")
+
+codes <- c("A", "C", "E", "F", "N", "O", "P", "U", "W", "X")
+# Collapsing C, P, X, O into Other
+collapsed_codes <- c("A", "O", "E", "F", "N", "O", "O", "U", "W", "O")
+
+code_names <- c("Admin", "Convention", "Evaluation", "Fact", "Next step", "Other",
+                "Proof framework", "Understanding check", "Warrant", "Example generation")
+
+code_details <- tibble(code = codes, code_name = code_names) %>% 
+  mutate(
+    collapsed_code = case_when(
+      code %in% c("C", "P", "X", "O") ~ "Other",
+      TRUE ~ code_name
+    )
+  ) %>% 
+  add_row(
+    code = "Total",
+    code_name = "Total",
+    collapsed_code = "Total"
+  )
+
+# Making list of all lectures and category code combos
+lec_cat <- expand_grid(
+  all_qs_all_lecs %>% select(course, session) %>% distinct(),
+  category = codes
+)
+```
+
+Just as a check, here is the total number of questions in the data we have loaded:
+
+```{r}
+all_qs <- all_qs_all_lecs %>% 
+  filter(!is.na(code_name))
+
+all_qs %>% 
+  tally(name = "num_qs") %>%
+  basic_kable()
+```
+
+# Question clusters
+
+
+## Prevalence
+
+A majority of questions are part of a cluster:
+
+```{r}
+all_qs %>% 
+  mutate(part_of_cluster = str_detect(cluster_q, "Y")) %>% 
+  tabyl(part_of_cluster) %>%
+  adorn_pct_formatting() %>% 
+  basic_kable(booktabs = T)
+```
+
+
+## Untangling U and A
+
+How often do U and U questions crop up in clusters? Ideally we would like to filter those out before the analyses, but that may not make sense if they are highly prevalent in clusters.
+
+```{r}
+numbered_clusters <- all_qs %>% 
+  #filter(!category %in% c("A", "U")) %>% 
+  filter(str_detect(cluster_q, "Y")) %>% 
+  group_by(course, session, cluster_q) %>% 
+  mutate(
+    cluster_id = cur_group_id(),
+    num_in_cluster = n(),
+    pos_within_cluster = row_number(),
+    excluded_qs = sum(category=="A") + sum(category=="U")
+  ) %>% 
+  bind_rows(
+    all_qs %>% 
+      filter(cluster_q == "N") %>% 
+      mutate(num_in_cluster = 1, pos_within_cluster = 1, excluded_qs = 1)
+  ) %>% 
+  mutate(num_in_cluster = as.numeric(num_in_cluster))
+
+clusters_excluding_AU_pivot <- numbered_clusters %>% 
+  ungroup() %>% 
+  # add a cluster ID for each single question
+  mutate(
+    cluster_id = ifelse(is.na(cluster_id), 5000+row_number(), cluster_id),
+  ) %>% 
+  select(cluster_id, num_in_cluster, excluded_qs) %>% 
+  distinct() %>% 
+  tabyl(num_in_cluster, excluded_qs)
+
+clusters_excluding_AU_pivot %>% 
+  basic_kable(booktabs = T) %>% 
+  add_header_above(c(" " = 1, "Number of A/U questions excluded" = 5))
+```
+
+This shows that in almost all cases, the number of excluded questions matches the size of the cluster -- so clusters tend to be either all A/U or all non-A/U.
+
+Investigating this further -- here we pick out all the cases where a cluster is partly made up of A/U:
+
+```{r}
+numbered_clusters %>% 
+  ungroup() %>% 
+  filter(excluded_qs > 0, excluded_qs < num_in_cluster) %>% 
+  select(course, session, cluster_id, cluster_q, category, question) %>% 
+  basic_kable(booktabs = T,
+        caption = "Clusters where one of the questions is A/U") %>%
+  collapse_rows(columns = 1:4, valign = "top")
+```
+
+These are really quite rare:
+
+```{r}
+affected_clusters <- numbered_clusters %>% 
+  ungroup() %>% 
+  mutate(affected = excluded_qs > 0 & excluded_qs < num_in_cluster) %>% 
+  select(cluster_id, affected) %>% 
+  distinct() %>% 
+  tabyl(affected)
+
+affected_clusters %>% 
+  basic_kable(booktabs = T)
+```
+
+Thus, in the following analyses, we first **omit all A/U questions**.
+
+
+# Question cluster frequencies
+
+After discarding all A/U questions, clusters are even more frequent:
+
+```{r}
+all_qs %>% 
+  filter(!category %in% c("A", "U")) %>% 
+  mutate(part_of_cluster = str_detect(cluster_q, "Y")) %>% 
+  tabyl(part_of_cluster) %>% 
+  adorn_pct_formatting() %>% 
+  basic_kable(booktabs = T)
+```
+
+
+How frequent are clusters of different lengths?
+
+```{r}
+numbered_clusters <- all_qs %>% 
+  filter(!category %in% c("A", "U")) %>% 
+  filter(str_detect(cluster_q, "Y")) %>% 
+  group_by(course, session, cluster_q) %>% 
+  mutate(
+    cluster_id = cur_group_id(),
+    num_in_cluster = n(),
+    pos_within_cluster = row_number()
+  ) %>% 
+  bind_rows(
+    all_qs %>% 
+      filter(!category %in% c("A", "U")) %>% 
+      filter(cluster_q == "N") %>% 
+      mutate(num_in_cluster = 1, pos_within_cluster = 1)
+  ) %>% 
+  mutate(num_in_cluster = as.numeric(num_in_cluster)) %>% 
+  # remove the very small number of clusters (5) which now only have 1 questions after A/U were removed
+  mutate(cluster_id = ifelse(num_in_cluster==1, NA, cluster_id)) %>% 
+  ungroup()
+
+numbered_clusters %>% 
+  filter(!is.na(cluster_id)) %>% 
+  # make sure all lectures appear, including those with counts of 0
+  right_join(
+    lec_cat %>% select(course, session),
+    by = c("course", "session")
+  ) %>% 
+  replace_na(list(num_in_cluster = 0)) %>% 
+  group_by(course, session) %>% 
+  summarise(
+    num_clusters = n_distinct(cluster_id, na.rm = TRUE),
+    cluster_size_mean = mean(num_in_cluster, na.rm = TRUE),
+    cluster_size_max = max(num_in_cluster, na.rm = TRUE),
+    .groups = "drop"
+  ) %>% 
+  head() %>% 
+  basic_kable(booktabs = T,
+              caption = "Excerpt of table showing number of clusters and the mean/max cluster size in each session")
+```
+
+Looking at the clusters, they tend to be quite small but there are a few larger ones:
+
+```{r}
+numbered_clusters %>% 
+  #filter(!is.na(cluster_id)) %>% 
+  #ungroup() %>%
+  filter(num_in_cluster > 1) %>% 
+  select(cluster_id, num_in_cluster) %>% 
+  distinct() %>% 
+  summarise(
+    num_clusters = n_distinct(cluster_id),
+    cluster_size_mean = mean(num_in_cluster),
+    cluster_size_median = median(num_in_cluster),
+    cluster_size_sd = sd(num_in_cluster),
+    cluster_size_max = max(num_in_cluster)
+  ) %>% 
+  basic_kable()
+```
+
+```{r}
+numbered_clusters %>% 
+  filter(!is.na(cluster_id)) %>% 
+  select(num_in_cluster, cluster_id) %>% 
+  distinct() %>% 
+  tabyl(num_in_cluster) %>% 
+  adorn_pct_formatting() %>% 
+  basic_kable()
+
+numbered_clusters %>% 
+  filter(!is.na(cluster_id)) %>% 
+  select(num_in_cluster, cluster_id) %>% 
+  distinct() %>% 
+  ggplot(aes(x = num_in_cluster)) +
+    geom_histogram(binwidth = 1)
+```
+
+
+
+## Clusters and responses
+
+```{r}
+cluster_response_rates <- numbered_clusters %>% 
+  filter(!category %in% c("A", "U")) %>% 
+  ungroup() %>% 
+  #filter(!is.na(cluster_id)) %>% 
+  mutate(
+    cluster_id = ifelse(is.na(cluster_id), 5000+row_number(), cluster_id)
+  ) %>% 
+  group_by(num_in_cluster, cluster_id) %>% 
+  summarise(got_a_response = last(student_response), .groups = "drop") %>% 
+  tabyl(num_in_cluster, got_a_response) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns()
+```
+
+
+```{r}
+cluster_responses_table <- numbered_clusters %>% 
+  #filter(!is.na(cluster_id)) %>% 
+  mutate(
+    cluster_id = ifelse(is.na(cluster_id), 5000+row_number(), cluster_id),
+    num_in_cluster = ifelse(num_in_cluster==1, "Single question", "Question cluster")
+  ) %>% 
+  group_by(num_in_cluster, cluster_id) %>% 
+  summarise(got_a_response = last(student_response), .groups = "drop") %>% 
+  tabyl(num_in_cluster, got_a_response) %>% 
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns() %>% 
+  arrange(desc(num_in_cluster)) %>% 
+  # add rows showing the detail on genuine clusters
+  bind_rows(
+    cluster_response_rates %>%
+      filter(num_in_cluster > 1) %>%
+      #mutate(num_in_cluster = as.character(num_in_cluster))
+      mutate(num_in_cluster = paste(num_in_cluster, "questions"))
+  )
+
+cluster_responses_table %>% 
+  kable(booktabs = T,
+         col.names = c("", "No", "Yes")) %>% 
+    kable_styling(full_width = F) %>%
+    #pack_rows("Question cluster size", 3, 9) %>% 
+    add_indent(c(3:9)) %>% 
+    add_header_above(c(" " = 1, "Student response" = 2))
+```
+
+<details><summary>LaTeX table</summary>
+```{r}
+cluster_responses_table %>% 
+  kable(booktabs = T,
+        format = "latex",
+         col.names = c("", "No", "Yes")) %>% 
+    kable_styling(full_width = F) %>%
+    #pack_rows("Question cluster size", 3, 9) %>% 
+    add_indent(c(3:9)) %>% 
+    add_header_above(c(" " = 1, "Student response" = 2)) %>% 
+  cat()
+```
+</details>
+
+
+# Analysis of the clusters
+
+
+```{r}
+cluster_summaries <- numbered_clusters %>%
+  filter(!category %in% c("A", "U")) %>% 
+  ungroup() %>% 
+  mutate(
+    cluster_id = ifelse(is.na(cluster_id), 5000+row_number(), cluster_id)
+  ) %>% 
+  group_by(cluster_id) %>% 
+  summarise(
+    category_chain = paste0(category, collapse = ''),
+    cluster_len = n(),
+    codes_used = n_distinct(category)
+  ) %>% 
+  arrange(-cluster_len)
+```
+
+Most clusters consist of questions of a single type:
+
+```{r}
+options(knitr.kable.NA = '')
+
+cluster_summaries_nums <-
+cluster_summaries %>% 
+  group_by(cluster_len, codes_used) %>% 
+  tally() %>% 
+  pivot_wider(
+    names_from = codes_used,
+    values_from = n
+  )
+
+cluster_summaries_nums %>% 
+  filter(cluster_len > 1) %>% 
+  # make the cluster_len a string so it's not added to the totals!
+  mutate(cluster_len = paste("", cluster_len)) %>% 
+  adorn_totals() %>% 
+  basic_kable() %>%
+  add_header_above(c(" " = 1, "Number of codes used" = 3))
+```
+
+
+Look at the more diverse clusters:
+
+```{r}
+diverse_clusters <- 
+cluster_summaries %>% 
+  filter(codes_used > 1) %>% 
+  filter(codes_used > 2 | cluster_len+codes_used > 5) %>% 
+  arrange(-codes_used, cluster_len)
+
+numbered_clusters %>% 
+  ungroup() %>% 
+  right_join(diverse_clusters, by = "cluster_id") %>% 
+  select(category_chain, course, session, category, question)
+```
+
+These are all the clusters of size 2 where both questions are of the same type:
+
+```{r}
+numbered_clusters %>% 
+  ungroup() %>% 
+  right_join(
+    cluster_summaries %>% 
+      filter(codes_used == 1, cluster_len == 2),
+    by = "cluster_id"
+  ) %>% 
+  select(cluster_id, category_chain, course, session, category, question)
+```
+This shows the number of clusters of each type signature:
+
+```{r}
+cluster_summaries %>% 
+  filter(cluster_len > 1) %>%
+  group_by(category_chain) %>%
+  tally() %>% 
+  arrange(-n) %>% 
+  basic_kable()
+```
+
+
+
+<details><summary>Session info</summary>
+```{r}
+sessionInfo()
+```
+</details>

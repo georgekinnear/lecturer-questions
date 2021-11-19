@@ -1,0 +1,377 @@
+---
+title: "Lecturer Questions: Wait times"
+author: "George Kinnear"
+date: "17/11/2021"
+output: 
+  html_document:
+    code_folding: hide
+    df_print: paged
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+
+# Tables
+library(knitr)
+library(kableExtra)
+basic_kable = function(df, ...) {
+  df %>% 
+    kable(...) %>%
+    kable_styling(bootstrap_options = "striped", full_width = F)
+}
+
+# Plot styling
+theme_set(theme_minimal())
+```
+
+```{r read-data, message=FALSE, warning=FALSE}
+all_qs_all_lecs <- read_csv("data/ANON_LQ_Maths_All.csv")
+anon_courses <- read_csv("data/ANON_courses.csv")
+
+codes <- c("A", "C", "E", "F", "N", "O", "P", "U", "W", "X")
+# Collapsing C, P, X, O into Other
+collapsed_codes <- c("A", "O", "E", "F", "N", "O", "O", "U", "W", "O")
+
+code_names <- c("Admin", "Convention", "Evaluation", "Fact", "Next step", "Other",
+                "Proof framework", "Understanding check", "Warrant", "Example generation")
+
+code_details <- tibble(code = codes, code_name = code_names) %>% 
+  mutate(
+    collapsed_code = case_when(
+      code %in% c("C", "P", "X", "O") ~ "Other",
+      TRUE ~ code_name
+    )
+  ) %>% 
+  add_row(
+    code = "Total",
+    code_name = "Total",
+    collapsed_code = "Total"
+  )
+
+# Making list of all lectures and category code combos
+lec_cat <- expand_grid(
+  all_qs_all_lecs %>% select(course, session) %>% distinct(),
+  category = codes
+)
+```
+
+Just as a check, here is the total number of mathematical questions in the data we have loaded:
+
+```{r}
+all_qs_all_lecs %>% 
+  filter(!is.na(code_name)) %>% 
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  tally(name = "num_qs") %>%
+  basic_kable()
+```
+
+# Wait time for each question
+
+Wait times are binned into the same ranges as in Paoletti et al. (2018):
+
+* 0
+* 1-2 seconds
+* 3-4 seconds
+* 5+ seconds
+
+```{r}
+qs_and_wait_time <- all_qs_all_lecs %>%
+  select(course, session, code_name, wait_time) %>%
+  filter(!is.na(code_name)) %>% 
+  mutate(
+    wait_time_bin = case_when(
+      wait_time == 0 ~ "0",
+      wait_time <3 ~ "1-2",
+      wait_time <5 ~ "3-4",
+      wait_time >4 ~ "5+"
+    )
+  )
+```
+
+Here we show the wait time for every (mathematical) question in the sample, grouped by question type and with the time bins highlighted:
+
+```{r}
+qs_and_wait_time %>% 
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  ggplot(aes(x = code_name)) +
+  geom_jitter(aes(y = wait_time, colour = wait_time_bin), alpha = 0.3, size = 2, stroke = 0) +
+  #geom_point(aes(y = num_q_mean, colour = course_level), alpha = 1, size = 3) +
+  stat_summary(aes(y = wait_time), fun=mean, geom="point", shape=20, size=6, colour = "red", alpha = 1, position = position_nudge(x = 0))+
+  scale_colour_viridis_d("Wait time (s)", end = 0.8, option = "plasma", direction = -1) +
+  theme_minimal(base_size = 16) +
+  theme(
+    legend.position = "bottom"
+  ) +
+  labs(
+    x = "Question Type",
+    y = "Wait time in seconds"
+  ) +
+  coord_flip()
+ggsave("figs/FIG_Wait_times.pdf",width=30,height=15,units="cm",dpi=300)
+```
+
+## Summary statistics
+
+This shows the mean (and SD) of the number of questions of each type and wait time **per lecture**.
+
+```{r}
+
+qs_and_wait_time_completed <- qs_and_wait_time %>% 
+  group_by(wait_time_bin, course, session, code_name) %>% 
+  summarise(
+    num_qs = n(),
+    .groups = "drop"
+  ) %>% 
+  # make sure lectures with no questions are included, with counts of 0
+  right_join(
+    lec_cat %>%
+      left_join(code_details, by = c("category" = "code")) %>% 
+      select(course, session, code_name) %>% 
+      expand_grid(
+        qs_and_wait_time %>% select(wait_time_bin) %>% distinct()
+      ),
+    by = c("wait_time_bin", "course", "session", "code_name")
+  ) %>% 
+  replace_na(list(num_qs = 0)) %>% 
+  filter(!code_name %in% c("Admin", "Understanding check"))
+
+wait_times_summary <- qs_and_wait_time_completed %>% 
+  group_by(wait_time_bin, code_name) %>% 
+  summarise(
+    n = n(),
+    sum = sum(num_qs),
+    num_qs_mean = mean(num_qs),
+    num_qs_sd = sd(num_qs),
+    .groups = "drop"
+  )
+
+wait_times_summary %>% 
+  mutate(
+    mean_and_sd = case_when(
+      is.na(num_qs_sd) ~ paste0(round(num_qs_mean, digits = 2), " "),
+      TRUE ~ paste0(round(num_qs_mean, digits = 2), " (", round(num_qs_sd, digits = 2),")")
+    )
+  ) %>% 
+  select(code_name, wait_time_bin, mean_and_sd) %>% 
+  pivot_wider(
+    names_from = wait_time_bin,
+    values_from = mean_and_sd
+  ) %>%  
+  kable(booktabs = T, caption = "Mean (sd)") %>% 
+  kable_styling(full_width = F)
+```
+
+Proportion of all questions with given wait time:
+
+```{r}
+# Totals
+wait_times_summary_totalsrow <- qs_and_wait_time_completed %>% 
+  # add up all the questions of any type in a given session
+  group_by(wait_time_bin, course, session) %>% 
+  summarise(
+    num_qs = sum(num_qs),
+    .groups = "drop"
+  ) %>%
+  group_by(wait_time_bin) %>% 
+  summarise(
+    n = n(),
+    num_qs_mean = mean(num_qs),
+    num_qs_sd = sd(num_qs),
+    .groups = "drop"
+  ) %>% 
+  ungroup() %>% 
+  mutate(code_name = "Total")
+
+wait_times_summary_totalsrow %>%
+  adorn_totals() %>% 
+  mutate(
+    num_qs_prop = num_qs_mean / sum(num_qs_mean)*2,
+    cell_entry = paste0(round(num_qs_mean, digits = 2), " (", round(num_qs_prop*100, digits = 0),"%)")
+  ) %>% 
+  select(wait_time_bin, cell_entry) %>%
+  basic_kable(booktabs = T)
+```
+
+This **per lecture** summary is analagous to Table 5 of Paoletti et al. (2018):
+
+```{r message=FALSE, warning=FALSE}
+counts_by_lecture_inc_totals_noAU <- read_csv("data/output-03-counts_by_lecture_inc_totals_noAU.csv")
+```
+
+
+```{r}
+wait_times_summary_wide_table <- wait_times_summary %>% 
+  bind_rows(
+    wait_times_summary_totalsrow
+  ) %>% 
+  select(
+    wait_time_bin,
+    code_name,
+    mean = num_qs_mean,
+    sd = num_qs_sd
+  ) %>% 
+  # add percentages of category
+  group_by(code_name) %>% 
+  mutate(
+    type_pc = round(mean / sum(mean) * 100, 0)
+  ) %>% 
+  ungroup() %>% 
+  pivot_wider(
+    names_from = wait_time_bin,
+    values_from = c(mean, sd, type_pc),
+    names_glue = "{wait_time_bin}_{.value}"
+  ) %>% 
+  # add the totals for each category, from earlier table
+  left_join(
+    counts_by_lecture_inc_totals_noAU %>% group_by(code_name) %>% summarise(num_q_mean = mean(num_q)),
+    by = "code_name"
+  ) %>% 
+  arrange(if_else(code_name=="Total",1,0),-num_q_mean) %>% 
+  # sort the columns in alphabetical order
+  select(code_name, num_q_mean, sort(tidyselect::peek_vars()))
+
+options(knitr.kable.NA = '-')
+wait_times_summary_wide_table %>% 
+    kable(booktabs = T,
+          digits = 2,
+          col.name = c("Question category",
+                       "M",
+                       rep(c("M", "SD", "% of cat"), 4))
+    ) %>% 
+    kable_styling(full_width = T) %>%
+    add_header_above(c(" " = 2, "0s" = 3, "1-2s" = 3, "3-4s" = 3, "5+s" = 3))
+```
+<details><summary>LaTeX table</summary>
+```{r}
+wait_times_summary_wide_table %>% 
+    kable(booktabs = T,
+          format = "latex",
+          digits = 2,
+          col.name = c("Question category",
+                       "M",
+                       rep(c("M", "SD", "% of cat"), 4))
+    ) %>% 
+    kable_styling(full_width = T) %>%
+    add_header_above(c(" " = 2, "0s" = 3, "1-2s" = 3, "3-4s" = 3, "5+s" = 3)) %>% 
+  cat()
+```
+</details>
+
+## As proportions of the overall number of questions
+
+Those per lecture numbers are quite small and hard to interpret.
+
+Instead, we work out the proportions more simply, as the proportion of overall number of questions. It gives the same percentages across the rows as the method above, e.g. 23% of Fact questions have a wait time of 0s.
+
+```{r}
+qs_and_wait_time_simple_summary <- qs_and_wait_time %>% 
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  tabyl(code_name, wait_time_bin) %>% 
+  adorn_totals(c("row", "col")) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns(position = "front") %>%
+  relocate(Total, .after = code_name) %>% 
+  # remove the percentage from the Total column, and sort by it
+  mutate(Total = parse_number(str_replace(Total, " \\(.*", ""))) %>% 
+  arrange(code_name=="Total", -Total) %>% 
+  # Tidy up the column names
+  rename("Question category" = code_name) %>%
+  rename_with(~ paste(.x, "s (%)"), .cols = matches("\\d"))
+
+qs_and_wait_time_simple_summary %>% 
+    basic_kable(booktabs = T, caption = "[Table 7 in the manuscript]. Number of questions of each type broken down by wait time.") %>% 
+    kable_styling(full_width = T)
+```
+
+<details><summary>LaTeX table</summary>
+```{r}
+qs_and_wait_time_simple_summary %>% 
+  kable(booktabs = T, format = "latex") %>% 
+  cat()
+```
+</details>
+
+
+## Comparison with Paoletti et al. (2018)
+
+Here we restrict to the courses that were deemed most comparable to those in the Paoletti et al. (2018) sample.
+
+The proportions here are not markedly different from those in the full sample.
+
+```{r}
+adv_qs_and_wait_time_simple_summary <- qs_and_wait_time %>% 
+  # restrict to only those courses that were deemed "advanced mathematics"
+  semi_join(
+    anon_courses %>% filter(advanced == "yes"),
+    by = c("course" = "anon_code")
+  ) %>% 
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  tabyl(code_name, wait_time_bin) %>% 
+  adorn_totals(c("row", "col")) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns(position = "front") %>%
+  relocate(Total, .after = code_name) %>% 
+  # remove the percentage from the Total column, and sort by it
+  mutate(Total = parse_number(str_replace(Total, " \\(.*", ""))) %>% 
+  arrange(code_name=="Total", -Total) %>% 
+  # Tidy up the column names
+  rename("Question category" = code_name) %>%
+  rename_with(~ paste(.x, "s (%)"), .cols = matches("\\d"))
+
+adv_qs_and_wait_time_simple_summary %>% 
+    basic_kable(booktabs = T, caption = "For the proof-based courses only, number of questions of each type broken down by wait time.") %>% 
+    kable_styling(full_width = T)
+```
+
+<details><summary>LaTeX table</summary>
+```{r}
+adv_qs_and_wait_time_simple_summary %>% 
+  kable(booktabs = T, format = "latex") %>% 
+  cat()
+```
+</details>
+
+
+Going even further, if we get rid of 1C which dominates the sample, the wait times skew higher:
+
+```{r}
+non1c_adv_qs_and_wait_time <- qs_and_wait_time %>% 
+  semi_join(
+    # restrict to only those courses that were deemed "advanced mathematics"
+    anon_courses %>%
+      filter(advanced == "yes") %>%
+      # and further restrict to avoid the course 1C which has many lectures in the sample
+      filter(anon_course != "1C"),
+    by = c("course" = "anon_code")
+  ) %>% 
+  filter(!code_name %in% c("Admin", "Understanding check"))
+
+non1c_adv_qs_and_wait_time_simple_summary <- non1c_adv_qs_and_wait_time %>% 
+  tabyl(code_name, wait_time_bin) %>% 
+  adorn_totals(c("row", "col")) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns(position = "front") %>%
+  relocate(Total, .after = code_name) %>% 
+  # remove the percentage from the Total column, and sort by it
+  mutate(Total = parse_number(str_replace(Total, " \\(.*", ""))) %>% 
+  arrange(code_name=="Total", -Total) %>% 
+  # Tidy up the column names
+  rename("Question category" = code_name) %>%
+  rename_with(~ paste(.x, "s (%)"), .cols = matches("\\d"))
+
+non1c_adv_qs_and_wait_time_simple_summary %>% 
+    basic_kable(booktabs = T, caption = "For the proof-based courses only, and excluding course 1C, number of questions of each type broken down by wait time.") %>% 
+    kable_styling(full_width = T)
+```
+
+For reference, this subset of the sample has `r non1c_adv_qs_and_wait_time %>% distinct(course, session) %>% nrow()` lectures.
+
+<details><summary>Session info</summary>
+```{r}
+sessionInfo()
+```
+</details>
