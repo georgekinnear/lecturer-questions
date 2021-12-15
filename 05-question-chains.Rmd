@@ -1,0 +1,401 @@
+---
+title: "Lecturer Questions: Question chains"
+author: "George Kinnear"
+date: "17/11/2021"
+output: 
+  html_document:
+    code_folding: hide
+    df_print: paged
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+
+# Tables
+library(knitr)
+library(kableExtra)
+basic_kable = function(df, ...) {
+  df %>% 
+    kable(...) %>%
+    kable_styling(bootstrap_options = "striped", full_width = F)
+}
+
+# Plot styling
+theme_set(theme_minimal())
+```
+
+```{r read-data, message=FALSE, warning=FALSE}
+all_qs_all_lecs <- read_csv("data/ANON_LQ_Maths_All.csv")
+anon_courses <- read_csv("data/ANON_courses.csv")
+
+codes <- c("A", "C", "E", "F", "N", "O", "P", "U", "W", "X")
+# Collapsing C, P, X, O into Other
+collapsed_codes <- c("A", "O", "E", "F", "N", "O", "O", "U", "W", "O")
+
+code_names <- c("Admin", "Convention", "Evaluation", "Fact", "Next step", "Other",
+                "Proof framework", "Understanding check", "Warrant", "Example generation")
+
+code_details <- tibble(code = codes, code_name = code_names) %>% 
+  mutate(
+    collapsed_code = case_when(
+      code %in% c("C", "P", "X", "O") ~ "Other",
+      TRUE ~ code_name
+    )
+  ) %>% 
+  add_row(
+    code = "Total",
+    code_name = "Total",
+    collapsed_code = "Total"
+  )
+
+# Making list of all lectures and category code combos
+lec_cat <- expand_grid(
+  all_qs_all_lecs %>% select(course, session) %>% distinct(),
+  category = codes
+)
+```
+
+Just as a check, here is the total number of questions in the data we have loaded:
+
+```{r}
+all_qs <- all_qs_all_lecs %>% 
+  filter(!is.na(code_name))
+
+all_qs %>% 
+  tally(name = "num_qs") %>%
+  basic_kable()
+```
+
+# Question chains
+
+
+## Prevalence
+
+A majority of questions are part of a chain:
+
+```{r}
+all_qs %>% 
+  mutate(part_of_chain = str_detect(cluster_q, "Y")) %>% 
+  tabyl(part_of_chain) %>%
+  adorn_pct_formatting() %>% 
+  basic_kable(booktabs = T)
+```
+
+
+## Untangling U and A
+
+How often do U and U questions crop up in chains? Ideally we would like to filter those out before the analyses, but that may not make sense if they are highly prevalent in chains
+
+```{r}
+numbered_chains <- all_qs %>% 
+  #filter(!category %in% c("A", "U")) %>% 
+  filter(str_detect(cluster_q, "Y")) %>% 
+  group_by(course, session, cluster_q) %>% 
+  mutate(
+    chain_id = cur_group_id(),
+    num_in_chain = n(),
+    pos_within_chain = row_number(),
+    excluded_qs = sum(category=="A") + sum(category=="U")
+  ) %>% 
+  bind_rows(
+    all_qs %>% 
+      filter(cluster_q == "N") %>% 
+      mutate(num_in_chain = 1, pos_within_chain = 1, excluded_qs = 1)
+  ) %>% 
+  mutate(num_in_chain = as.numeric(num_in_chain))
+
+chains_excluding_AU_pivot <- numbered_chains %>% 
+  ungroup() %>% 
+  # add a chain ID for each single question
+  mutate(
+    chain_id = ifelse(is.na(chain_id), 5000+row_number(), chain_id),
+  ) %>% 
+  select(chain_id, num_in_chain, excluded_qs) %>% 
+  distinct() %>% 
+  tabyl(num_in_chain, excluded_qs)
+
+chains_excluding_AU_pivot %>% 
+  basic_kable(booktabs = T) %>% 
+  add_header_above(c(" " = 1, "Number of A/U questions excluded" = 5))
+```
+
+This shows that in almost all cases, the number of excluded questions matches the size of the chain -- so chains tend to be either all A/U or all non-A/U.
+
+Investigating this further -- here we pick out all the cases where a chain is partly made up of A/U:
+
+```{r}
+numbered_chains %>% 
+  ungroup() %>% 
+  filter(excluded_qs > 0, excluded_qs < num_in_chain) %>% 
+  select(course, session, chain_id, cluster_q, category, question) %>% 
+  basic_kable(booktabs = T,
+        caption = "Chains where one of the questions is A/U") %>%
+  collapse_rows(columns = 1:4, valign = "top")
+```
+
+These are really quite rare:
+
+```{r}
+affected_chains <- numbered_chains %>% 
+  ungroup() %>% 
+  mutate(affected = excluded_qs > 0 & excluded_qs < num_in_chain) %>% 
+  select(chain_id, affected) %>% 
+  distinct() %>% 
+  tabyl(affected)
+
+affected_chains %>% 
+  basic_kable(booktabs = T)
+```
+
+Thus, in the following analyses, we first **omit all A/U questions**.
+
+
+# Question chain frequencies
+
+After discarding all A/U questions, chains are even more frequent:
+
+```{r}
+all_qs %>% 
+  filter(!category %in% c("A", "U")) %>% 
+  mutate(part_of_chain = str_detect(cluster_q, "Y")) %>% 
+  tabyl(part_of_chain) %>% 
+  adorn_pct_formatting() %>% 
+  basic_kable(booktabs = T)
+```
+
+
+How frequent are chains of different lengths?
+
+```{r}
+numbered_chains <- all_qs %>% 
+  filter(!category %in% c("A", "U")) %>% 
+  filter(str_detect(cluster_q, "Y")) %>% 
+  group_by(course, session, cluster_q) %>% 
+  mutate(
+    chain_id = cur_group_id(),
+    num_in_chain = n(),
+    pos_within_chain = row_number()
+  ) %>% 
+  bind_rows(
+    all_qs %>% 
+      filter(!category %in% c("A", "U")) %>% 
+      filter(cluster_q == "N") %>% 
+      mutate(num_in_chain = 1, pos_within_chain = 1)
+  ) %>% 
+  mutate(num_in_chain = as.numeric(num_in_chain)) %>% 
+  # remove the very small number of chains (5) which now only have 1 questions after A/U were removed
+  mutate(chain_id = ifelse(num_in_chain==1, NA, chain_id)) %>% 
+  ungroup()
+
+numbered_chains %>% 
+  filter(!is.na(chain_id)) %>% 
+  # make sure all lectures appear, including those with counts of 0
+  right_join(
+    lec_cat %>% select(course, session),
+    by = c("course", "session")
+  ) %>% 
+  replace_na(list(num_in_chain = 0)) %>% 
+  group_by(course, session) %>% 
+  summarise(
+    num_chains = n_distinct(chain_id, na.rm = TRUE),
+    chain_size_mean = mean(num_in_chain, na.rm = TRUE),
+    chain_size_max = max(num_in_chain, na.rm = TRUE),
+    .groups = "drop"
+  ) %>% 
+  head() %>% 
+  basic_kable(booktabs = T,
+              caption = "Excerpt of table showing number of chains and the mean/max chain size in each session")
+```
+
+Looking at the chains, they tend to be quite small but there are a few larger ones:
+
+```{r}
+numbered_chains %>% 
+  #filter(!is.na(chain_id)) %>% 
+  #ungroup() %>%
+  filter(num_in_chain > 1) %>% 
+  select(chain_id, num_in_chain) %>% 
+  distinct() %>% 
+  summarise(
+    num_chains = n_distinct(chain_id),
+    chain_size_mean = mean(num_in_chain),
+    chain_size_median = median(num_in_chain),
+    chain_size_sd = sd(num_in_chain),
+    chain_size_max = max(num_in_chain)
+  ) %>% 
+  basic_kable()
+```
+
+```{r}
+numbered_chains %>% 
+  filter(!is.na(chain_id)) %>% 
+  select(num_in_chain, chain_id) %>% 
+  distinct() %>% 
+  tabyl(num_in_chain) %>% 
+  adorn_pct_formatting() %>% 
+  basic_kable()
+
+numbered_chains %>% 
+  filter(!is.na(chain_id)) %>% 
+  select(num_in_chain, chain_id) %>% 
+  distinct() %>% 
+  ggplot(aes(x = num_in_chain)) +
+    geom_histogram(binwidth = 1)
+```
+
+
+
+## Chains and responses
+
+```{r}
+chain_response_rates <- numbered_chains %>% 
+  filter(!category %in% c("A", "U")) %>% 
+  ungroup() %>% 
+  #filter(!is.na(chain_id)) %>% 
+  mutate(
+    chain_id = ifelse(is.na(chain_id), 5000+row_number(), chain_id)
+  ) %>% 
+  group_by(num_in_chain, chain_id) %>% 
+  summarise(got_a_response = last(student_response), .groups = "drop") %>% 
+  tabyl(num_in_chain, got_a_response) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns()
+```
+
+
+```{r}
+chain_responses_table <- numbered_chains %>% 
+  #filter(!is.na(chain_id)) %>% 
+  mutate(
+    chain_id = ifelse(is.na(chain_id), 5000+row_number(), chain_id),
+    num_in_chain = ifelse(num_in_chain==1, "Single question", "Question chain")
+  ) %>% 
+  group_by(num_in_chain, chain_id) %>% 
+  summarise(got_a_response = last(student_response), .groups = "drop") %>% 
+  tabyl(num_in_chain, got_a_response) %>% 
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns() %>% 
+  arrange(desc(num_in_chain)) %>% 
+  # add rows showing the detail on genuine chains
+  bind_rows(
+    chain_response_rates %>%
+      filter(num_in_chain > 1) %>%
+      #mutate(num_in_chain = as.character(num_in_chain))
+      mutate(num_in_chain = paste(num_in_chain, "questions"))
+  )
+
+chain_responses_table %>% 
+  kable(booktabs = T,
+         col.names = c("", "No", "Yes")) %>% 
+    kable_styling(full_width = F) %>%
+    #pack_rows("Question chain size", 3, 9) %>% 
+    add_indent(c(3:9)) %>% 
+    add_header_above(c(" " = 1, "Student response" = 2))
+```
+
+<details><summary>LaTeX table</summary>
+```{r}
+chain_responses_table %>% 
+  kable(booktabs = T,
+        format = "latex",
+         col.names = c("", "No", "Yes")) %>% 
+    kable_styling(full_width = F) %>%
+    #pack_rows("Question chain size", 3, 9) %>% 
+    add_indent(c(3:9)) %>% 
+    add_header_above(c(" " = 1, "Student response" = 2)) %>% 
+  cat()
+```
+</details>
+
+
+# Analysis of the chains
+
+
+```{r}
+chain_summaries <- numbered_chains %>%
+  filter(!category %in% c("A", "U")) %>% 
+  ungroup() %>% 
+  mutate(
+    chain_id = ifelse(is.na(chain_id), 5000+row_number(), chain_id)
+  ) %>% 
+  group_by(chain_id) %>% 
+  summarise(
+    category_chain = paste0(category, collapse = ''),
+    chain_len = n(),
+    codes_used = n_distinct(category)
+  ) %>% 
+  arrange(-chain_len)
+```
+
+Most chains consist of questions of a single type:
+
+```{r}
+options(knitr.kable.NA = '')
+
+chain_summaries_nums <-
+chain_summaries %>% 
+  group_by(chain_len, codes_used) %>% 
+  tally() %>% 
+  pivot_wider(
+    names_from = codes_used,
+    values_from = n
+  )
+
+chain_summaries_nums %>% 
+  filter(chain_len > 1) %>% 
+  # make the chain_len a string so it's not added to the totals!
+  mutate(chain_len = paste("", chain_len)) %>% 
+  adorn_totals() %>% 
+  basic_kable() %>%
+  add_header_above(c(" " = 1, "Number of codes used" = 3))
+```
+
+
+Look at the more diverse chains:
+
+```{r}
+diverse_chains <- 
+chain_summaries %>% 
+  filter(codes_used > 1) %>% 
+  filter(codes_used > 2 | chain_len+codes_used > 5) %>% 
+  arrange(-codes_used, chain_len)
+
+numbered_chains %>% 
+  ungroup() %>% 
+  right_join(diverse_chains, by = "chain_id") %>% 
+  select(category_chain, course, session, category, question)
+```
+
+These are all the chains of size 2 where both questions are of the same type:
+
+```{r}
+numbered_chains %>% 
+  ungroup() %>% 
+  right_join(
+    chain_summaries %>% 
+      filter(codes_used == 1, chain_len == 2),
+    by = "chain_id"
+  ) %>% 
+  select(chain_id, category_chain, course, session, category, question)
+```
+This shows the number of chains of each type signature:
+
+```{r}
+chain_summaries %>% 
+  filter(chain_len > 1) %>%
+  group_by(category_chain) %>%
+  tally() %>% 
+  arrange(-n) %>% 
+  basic_kable()
+```
+
+
+
+<details><summary>Session info</summary>
+```{r}
+sessionInfo()
+```
+</details>
