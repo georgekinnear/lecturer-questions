@@ -361,6 +361,26 @@ lecturer_category_freqs %>%
   )
 ggsave("figs/FIG_question_categories_by_lecturer.pdf",width=20,height=14,units="cm",dpi=300)
 ```
+<details><summary>Raw data</summary>
+```{r}
+lecturer_category_freqs_dat <- lecturer_category_freqs %>% 
+  select(course, collapsed_code, num_qs) %>% 
+  pivot_wider(
+    names_from = collapsed_code,
+    values_from = num_qs
+  )
+
+lecturer_category_freqs_dat
+```
+As percentages:
+
+```{r}
+lecturer_category_freqs_dat %>% 
+  adorn_percentages() %>% 
+  adorn_pct_formatting()
+```
+
+</details>
 
 The same plot but emphasising the proportions:
 
