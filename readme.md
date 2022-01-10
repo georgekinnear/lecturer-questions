@@ -19,3 +19,17 @@ The script [`00-data-import.R`](00-data-import.R) was used to pull in these data
 - [02-comparison-with-paoletti.Rmd](02-comparison-with-paoletti.Rmd) ([output](https://htmlpreview.github.io/?https://github.com/georgekinnear/lecturer-questions/blob/main/02-comparison-with-paoletti.html))
   
   Reads the Paoletti et al. (2018) data, and presents a summary of the comparable lectures from our sample.
+  
+- [03-lecturer-variation.Rmd](03-lecturer-variation.Rmd) ([output](https://htmlpreview.github.io/?https://github.com/georgekinnear/lecturer-questions/blob/main/03-lecturer-variation.html))
+  
+  Produces summaries of the sample of questions, broken down by lecturer and question category.
+  
+- [04-wait-times.Rmd](04-wait-times.Rmd) ([output](https://htmlpreview.github.io/?https://github.com/georgekinnear/lecturer-questions/blob/main/04-wait-times.html))
+
+  Analysis of questions broken down by category and wait time.
+  
+- [05-question-chains.Rmd](05-question-chains.Rmd) ([output](https://htmlpreview.github.io/?https://github.com/georgekinnear/lecturer-questions/blob/main/05-question-chains.html))
+
+  Analysis of "question chains", which are related questions asked in succession (e.g. to give hints or elaborate).
+  
+  
