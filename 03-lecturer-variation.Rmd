@@ -1,7 +1,7 @@
 ---
 title: "Lecturer Questions: Variation in number and category"
 author: "George Kinnear"
-date: "17/11/2021"
+date: "2024-04-04"
 output: 
   html_document:
     code_folding: hide
@@ -93,8 +93,8 @@ produce_summary_table <- function(df) {
     mutate(
       "num_sr_mean_pc" = num_sr_mean / num_q_mean * 100,
       "num_po_mean_pc" = num_po_mean / num_q_mean * 100,
-      across(contains("pc"), round, digits = 0),
-      across(where(is.numeric), round, digits = 2)
+      across(contains("pc"), \(x) round(x, digits = 0)),
+      across(where(is.numeric), \(x) round(x, digits = 2))
     )
 }
 show_summary_table <- function(counts_by_lecture_summary_table) {
@@ -270,7 +270,9 @@ all_qs_all_lecs %>%
   basic_kable(booktabs = T)
 ```
 
-Looking at example generation questions in particular:
+### Example generation
+
+Looking at example-generation questions in particular:
 
 ```{r}
 counts_by_lecture_inc_totals %>% 
@@ -282,6 +284,42 @@ counts_by_lecture_inc_totals %>%
   tabyl(X_qs) %>% 
   basic_kable()
 ```
+
+```{r}
+all_qs_all_lecs %>% 
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  filter(!is.na(code_name)) %>% 
+  left_join(anon_courses, join_by(course == anon_code)) %>% 
+  group_by(advanced, course) %>% 
+  summarise(
+    num_X_qs = sum(code_name == "Example generation"),
+    num_all_qs = n()
+  ) %>% 
+  ungroup() %>% 
+  group_by(advanced) %>% 
+  summarise(
+    num_courses = sum(num_X_qs > 0),
+    num_X_qs = sum(num_X_qs),
+    num_all_qs = sum(num_all_qs),
+    pct_X_qs = num_X_qs / num_all_qs * 100
+  ) %>% 
+  basic_kable()
+
+
+X_qs_details <- all_qs_all_lecs %>% 
+  filter(code_name == "Example generation") %>% 
+  left_join(anon_courses, join_by(course == anon_code))
+
+X_qs_details %>% 
+  group_by(advanced, course, course_topic) %>% 
+  tally() %>% 
+  basic_kable()
+
+X_qs_details %>% 
+  select(advanced, course, course_topic, session, time, wait_time, student_response, cluster_q, question) %>% 
+  basic_kable()
+```
+
 
 ### Questions by category
 
@@ -368,7 +406,8 @@ lecturer_category_freqs_dat <- lecturer_category_freqs %>%
   pivot_wider(
     names_from = collapsed_code,
     values_from = num_qs
-  )
+  ) %>% 
+  select(course, Fact, `Next step`, Warrant, Evaluation, Other)
 
 lecturer_category_freqs_dat
 ```
@@ -405,6 +444,67 @@ lecturer_category_freqs %>%
     y = "Proportion of questions"
   )
 ```
+
+The same plot with categories in separate rows:
+
+```{r}
+lecturer_category_freqs %>% 
+  ggplot(aes(x = fct_reorder(course, ordering))) +
+  scale_x_discrete(labels = function(x) {str_replace(x, "(.*)_", "")}) +
+  facet_grid(
+    cols = vars(course_code),
+    rows = vars(category),
+    scales = "free",
+    space = "free",
+    switch = "both"
+  ) +
+  geom_bar(aes(y = mean_qs, fill = category), position = "stack", stat = "identity") +
+  scale_fill_viridis_d("Category", begin = 0.1, end = 0.8, option = "plasma", direction = -1) +
+  theme_minimal(base_size = 16) +
+  theme(
+    strip.placement = "outside",
+    axis.text.x=element_text(angle=90, vjust = 0.5),
+    legend.position = "bottom",
+        #panel.border = element_rect(color = "#cccccc", fill = NA, size = 1),
+        #panel.spacing = unit(0, "lines"),
+    strip.text.x = element_text(angle = 90),
+    strip.text.y.left = element_text(angle = 0)
+  ) +
+  labs(
+    x = "Course and lecturer",
+    y = "Mean questions per lecture"
+  )
+ggsave("figs/FIG_question_categories_by_lecturer_v2.pdf",width=20,height=14,units="cm",dpi=300)
+```
+
+The same plot but more greyscale-friendly:
+
+```{r}
+
+lecturer_category_freqs %>% 
+  ggplot(aes(x = fct_reorder(course, ordering))) +
+  scale_x_discrete(labels = function(x) {str_replace(x, "(.*)_", "")}) +
+  facet_grid(cols = vars(course_code), scales = "free", space = "free", switch = "both") +
+  geom_bar(aes(y = mean_qs, fill = category), position = "stack", stat = "identity") +
+  scale_fill_grey("Category", start = 0, end = 0.9) +
+  #scale_fill_brewer("Category", palette = "Purples", direction = -1) +
+  #scale_fill_viridis_d("Category", option = "plasma", end = 0.9) +
+  theme_minimal(base_size = 16) +
+  theme(
+    strip.placement = "outside",
+    axis.text.x=element_text(angle=90, vjust = 0.5),
+    legend.position = "bottom",
+        #panel.border = element_rect(color = "#cccccc", fill = NA, size = 1),
+        #panel.spacing = unit(0, "lines"),
+    strip.text = element_text(angle=90),
+  ) +
+  labs(
+    x = "Course and lecturer",
+    y = "Mean questions per lecture"
+  )
+ggsave("figs/FIG_question_categories_by_lecturer_bw.pdf",width=20,height=14,units="cm",dpi=300)
+```
+
 
 <details><summary>Session info</summary>
 ```{r}
