@@ -1,7 +1,7 @@
 ---
 title: "Lecturer Questions: Question chains"
 author: "George Kinnear"
-date: "17/11/2021"
+date: "2024-04-04"
 output: 
   html_document:
     code_folding: hide
@@ -392,6 +392,173 @@ chain_summaries %>%
   basic_kable()
 ```
 
+## Categories
+
+### Means per lecture
+
+```{r}
+numbered_chains %>% 
+  filter(!code_name %in% c("Total", "Admin", "Understanding check")) %>% 
+  group_by(course, session, code_name) %>% 
+  summarise(
+    num_qs = n(),
+    num_single_qs = sum(is.na(chain_id)),
+    num_chain_qs = sum(!is.na(chain_id))
+  ) %>% 
+  ungroup() %>% 
+    group_by(code_name) %>%
+    summarise(across(contains("num_"), list(mean = mean)), .groups = "drop_last")
+```
+
+```{r}
+numbered_chains %>% 
+  #filter(!code_name %in% c("Total", "Admin", "Understanding check")) %>% 
+  # focus on single questions
+  #filter(is.na(chain_id)) %>% 
+  group_by(course, session, category, code_name) %>% 
+  summarise(
+    num_qs = n(),
+    num_single_qs = sum(is.na(chain_id)),
+    num_chain_qs = sum(!is.na(chain_id))
+  ) %>% 
+  # make sure lectures with no questions are included, with counts of 0
+  full_join(lec_cat, by = c("course", "session", "category")) %>%
+  mutate_all(~replace(., is.na(.), 0)) %>% 
+  arrange(course, session, category) %>% 
+  #add_group_totals() %>% 
+  #mutate(category = if_else(code_name == "Total", "Total", category)) %>%
+  left_join(code_details, by = c("category" = "code")) %>% 
+  group_by(code_name = code_name.y) %>%
+  group_by(code_name = collapsed_code) %>%
+  summarise(across(contains("num_"), list(mean = mean)), .groups = "drop_last") %>% 
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  pivot_longer(cols = ends_with("_mean"), names_to = "type", values_to = "mean_num", names_pattern = "num_(.*)_mean") %>% 
+  filter(type != "qs") %>% 
+  mutate(code_name = fct_relevel(code_name, "Fact", "Next step", "Warrant", "Evaluation", "Other")) %>%
+  ggplot(aes(x = type)) +
+  geom_bar(aes(y = mean_num, fill = code_name),
+           position = "stack",
+           stat = "identity") +
+  scale_fill_viridis_d("Code", option = "plasma") +
+  labs(x = "Type of question", y = "Mean number of questions per lecture")
+```
+
+### Overall numbers
+
+```{r}
+qs_tally_by_cat_and_chain <- numbered_chains %>% 
+  #filter(!code_name %in% c("Total", "Admin", "Understanding check")) %>% 
+  # focus on single questions
+  #filter(is.na(chain_id)) %>% 
+  group_by(category, code_name) %>% 
+  summarise(
+    num_qs = n(),
+    num_single_qs = sum(is.na(chain_id)),
+    num_chain_qs = sum(!is.na(chain_id))
+  ) %>%
+  left_join(code_details, by = c("category" = "code")) %>% 
+  select(code_name = code_name.y, collapsed_code, starts_with("num_"))
+
+qs_tally_by_cat_and_chain %>%
+  select(-collapsed_code) %>% 
+  arrange(-num_qs) %>% 
+  basic_kable()
+```
+
+
+Grouping the less common categories together:
+
+```{r}
+qs_tally_by_cat_and_chain %>% 
+  group_by(code_name = collapsed_code) %>%
+  summarise(across(contains("num_"), sum), .groups = "drop_last") %>%
+  arrange(-num_qs) %>% 
+  adorn_totals() %>% 
+  adorn_percentages("col") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns(position = "front") %>%
+  basic_kable(col.names = c("Code", "All questions", "Single questions", "Questions in a chain"))
+```
+
+<details><summary>LaTeX table</summary>
+```{r}
+qs_tally_by_cat_and_chain %>% 
+  group_by(code_name = collapsed_code) %>%
+  summarise(across(contains("num_"), sum), .groups = "drop_last") %>%
+  arrange(-num_qs) %>% 
+  adorn_totals() %>% 
+  adorn_percentages("col") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns(position = "front") %>%
+  basic_kable(col.names = c("Category", "All questions", "Single questions", "Questions in a chain"), format = "latex", booktabs = T) %>% 
+  cat()
+```
+</details>
+
+
+```{r}
+qs_tally_by_cat_and_chain %>% 
+  group_by(code_name = collapsed_code) %>%
+  summarise(across(contains("num_"), sum), .groups = "drop_last") %>% 
+  select(-num_qs) %>% 
+  pivot_longer(cols = starts_with("num_"), names_to = "type", values_to = "count", names_pattern = "num_(.*)_qs") %>% 
+  mutate(code_name = fct_relevel(code_name, "Fact", "Next step", "Warrant", "Evaluation", "Other")) %>%
+  ggplot(aes(x = type)) +
+  geom_bar(aes(y = count, fill = code_name),
+           position = "fill",
+           stat = "identity") +
+  scale_fill_viridis_d("Code", option = "plasma") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Type of question", y = "Proportion of questions")
+```
+
+
+## Wait time
+
+
+```{r}
+numbered_chains %>% 
+  mutate(chain = if_else(is_cluster == "Y", "Part of a chain", "Single question")) %>% 
+  ggplot(aes(x = wait_time)) +
+  geom_histogram(binwidth = 1) +
+  geom_boxplot(width = 30, position = position_nudge(y = -30)) +
+  facet_wrap(~ chain, ncol = 1) +
+  labs(x = "Wait time (in seconds)", y = "Number of questions")
+```
+
+```{r}
+find_mode <- function(x) {
+  u <- unique(x)
+  tab <- tabulate(match(x, u))
+  u[tab == max(tab)]
+}
+numbered_chains %>% 
+  group_by(part_of_chain = is_cluster) %>% 
+  summarise(
+    num_questions = n(),
+    mean_wait_time = mean(wait_time),
+    median_wait_time = median(wait_time),
+    #mode_wait_time = purrr::map_dbl(wait_time, ~ which.max(tabulate(.x)))
+    mode_wait_time = find_mode(wait_time)
+  ) %>% 
+  rename_with(~ str_remove(., "_wait_time")) %>% 
+  basic_kable() %>%
+  add_header_above(c(" " = 2, "Wait time (s)" = 3))
+```
+```{r}
+numbered_chains %>% 
+  group_by(part_of_chain = is_cluster, is_last = pos_within_chain == num_in_chain) %>% 
+  summarise(
+    num_questions = n(),
+    mean_wait_time = mean(wait_time),
+    median_wait_time = median(wait_time),
+    #mode_wait_time = purrr::map_dbl(wait_time, ~ which.max(tabulate(.x)))
+    mode_wait_time = find_mode(wait_time)
+  ) %>% 
+  rename_with(~ str_remove(., "_wait_time")) %>% 
+  basic_kable() %>%
+  add_header_above(c(" " = 3, "Wait time (s)" = 3))
+```
 
 
 <details><summary>Session info</summary>
