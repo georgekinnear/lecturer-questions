@@ -1,7 +1,7 @@
 ---
 title: "Lecturer Questions: Wait times"
 author: "George Kinnear"
-date: "17/11/2021"
+date: "2024-04-04"
 output: 
   html_document:
     code_folding: hide
@@ -369,6 +369,92 @@ non1c_adv_qs_and_wait_time_simple_summary %>%
 ```
 
 For reference, this subset of the sample has `r non1c_adv_qs_and_wait_time %>% distinct(course, session) %>% nrow()` lectures.
+
+## Wait time and responses
+
+```{r}
+wait_time_vs_response_tab <- all_qs_all_lecs %>%
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  filter(!is.na(code_name)) %>% 
+  mutate(
+    wait_time_bin = case_when(
+      wait_time == 0 ~ "0",
+      wait_time <3 ~ "1-2",
+      wait_time <5 ~ "3-4",
+      wait_time >4 ~ "5+"
+    )
+  ) %>% 
+  count(wait_time_bin, student_response)
+
+wait_time_vs_response_tab %>% 
+  group_by(wait_time_bin) %>% 
+  mutate(pct_label = str_glue("{n}\n({round(n / sum(n) * 100, 0)}%)")) %>% 
+  ggplot(aes(x = wait_time_bin, y = n, fill = student_response)) +
+    geom_bar(position = "fill", stat = "identity") +
+    geom_text(aes(label = pct_label), position = position_fill(vjust = 0.5), colour = "white") +
+    scale_fill_viridis_d("Student response", begin = 0, end = 0.7, option = "plasma") +
+    labs(x = "Wait time", y = "Proportion of questions")
+
+wait_time_vs_response_tab %>% 
+  pivot_wider(names_from = "student_response", values_from = "n") %>% 
+  adorn_totals(c("row", "col")) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns(position = "front") %>% 
+  relocate(Total, .after = wait_time_bin) %>% 
+  mutate(Total = parse_number(str_replace(Total, " \\(.*", ""))) %>% 
+  basic_kable(
+    booktabs = T,
+    caption = "Response rates for questions by wait time.",
+    col.names = c("Wait time", "Total", "No", "Yes")
+  ) %>% 
+  kable_styling(full_width = T) %>%
+  add_header_above(c(" " = 2, "Student response" = 2))
+```
+Considering only questions not part of a chain:
+
+```{r}
+wait_time_vs_response_tab_nochain <- all_qs_all_lecs %>%
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  filter(!is.na(code_name)) %>% 
+  mutate(
+    wait_time_bin = case_when(
+      wait_time == 0 ~ "0",
+      wait_time <3 ~ "1-2",
+      wait_time <5 ~ "3-4",
+      wait_time >4 ~ "5+"
+    )
+  ) %>% 
+  filter(cluster_q == "N") %>% 
+  count(wait_time_bin, student_response)
+
+wait_time_vs_response_tab_nochain %>% 
+  group_by(wait_time_bin) %>% 
+  mutate(pct_label = str_glue("{n}\n({round(n / sum(n) * 100, 0)}%)")) %>% 
+  ggplot(aes(x = wait_time_bin, y = n, fill = student_response)) +
+    geom_bar(position = "fill", stat = "identity") +
+    geom_text(aes(label = pct_label), position = position_fill(vjust = 0.5), colour = "white") +
+    scale_fill_viridis_d("Student response", begin = 0, end = 0.7, option = "plasma") +
+    labs(x = "Wait time", y = "Proportion of questions", title = "Response to questions not part of a chain")
+
+wait_time_vs_response_tab_nochain %>% 
+  pivot_wider(names_from = "student_response", values_from = "n") %>% 
+  adorn_totals(c("row", "col")) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits = 0) %>%
+  adorn_ns(position = "front") %>% 
+  relocate(Total, .after = wait_time_bin) %>% 
+  mutate(Total = parse_number(str_replace(Total, " \\(.*", ""))) %>% 
+  basic_kable(
+    booktabs = T,
+    caption = "Response rates for questions by wait time.",
+    col.names = c("Wait time", "Total", "No", "Yes")
+  ) %>% 
+  kable_styling(full_width = T) %>%
+  add_header_above(c(" " = 2, "Student response" = 2))
+```
+
+
 
 <details><summary>Session info</summary>
 ```{r}
