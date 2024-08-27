@@ -72,7 +72,7 @@ code_details %>%
 ```{r}
 course_demographics <- anon_courses %>% 
   left_join(all_qs_all_lecs %>% select(course, session) %>% distinct(), by = c("anon_code" = "course")) %>% 
-  group_by(anon_course) %>% 
+  group_by(anon_course, anon_nickname) %>% 
   summarise(
     course_level = first(course_level),
     course_topic = first(course_topic),
@@ -85,6 +85,7 @@ course_demographics <- anon_courses %>%
   select(
     year,
     course_code = anon_course,
+    course_codename = anon_nickname,
     course_topic,
     room_capacity,
     num_lecturers,
@@ -101,6 +102,7 @@ course_demographics %>%
   rename(
     "Year" = year,
     "Course code" = course_code,
+    "Course codename" = course_codename,
     "Topic" = course_topic,
     "Room capacity (approx.)" = room_capacity_approx,
     "Number of lecturers" = num_lecturers,
@@ -134,6 +136,7 @@ all_qs_all_lecs %>%
 all_qs_all_lecs %>% 
   tabyl(course, category) %>% 
   select(-"NA_") %>% 
+  as_tibble() %>% # fix as discussed at https://github.com/sfirke/janitor/issues/527
   adorn_totals(c("row", "col")) %>% 
   basic_kable(booktabs = T)
 ```
@@ -146,6 +149,7 @@ all_qs_all_lecs %>%
   #filter(category != "A" & category != "U") %>% 
   tabyl(course, category) %>% 
   select(-"NA_", -A, -U) %>% 
+  as_tibble() %>% # fix as discussed at https://github.com/sfirke/janitor/issues/527
   adorn_totals(c("row", "col")) %>% 
   basic_kable(booktabs = T)
 ```

@@ -196,14 +196,15 @@ lecturer_counts_plot_data %>%
 lecturer_counts_plot_data %>% 
   separate(course, into=c("course_code", "lecturer"), sep = "_", remove = FALSE) %>% 
   separate(course_code, into=c("course_year", "course_letter"), sep = 1, remove = FALSE) %>% 
+  left_join(anon_courses %>% select(anon_code, anon_nickname), join_by("course" == "anon_code")) %>% 
   mutate(
     # sort by course (1A, 1B etc), then within that sort lecturers by mean number of qs asked
     ordering = 1000*as.numeric(as.factor(course_code)) - num_q_mean,
-    course_and_lecturer = fct_reorder(course, ordering)
+    course_and_lecturer = fct_reorder(str_glue("{anon_nickname}_{lecturer}"), ordering)
   ) %>% 
   ggplot(aes(x = course_and_lecturer)) +
   scale_x_discrete(labels = function(x) {str_replace(x, "(.*)_", "")}) +
-  facet_grid(cols = vars(course_code), scales = "free", space = "free", switch = "both") +
+  facet_grid(cols = vars(anon_nickname), scales = "free", space = "free", switch = "both") +
   geom_point(aes(y = num_q_mean), size = 4, colour = "#8707a6ee") +
   geom_point(aes(y = number), alpha = 0.3, size = 2, stroke = 0) +
   #geom_point(aes(y = num_q_mean, colour = course_level), alpha = 1, size = 3.5) +
@@ -376,7 +377,9 @@ lecturer_category_freqs <- counts_by_lecture_inc_totals %>%
     ordering = 1000*as.numeric(as.factor(course_code)) - bar_height,
     # manually reorder the categories by overall frequency
     category = fct_relevel(category, "Fact", "Next step", "Warrant", "Evaluation", "Other")
-  )
+  ) %>% 
+  left_join(anon_courses %>% select(course_code = anon_course, course_shortname = anon_nickname) %>% distinct()) %>% 
+  mutate(course_code = course_shortname, .keep = "unused")
 
 lecturer_category_freqs %>% 
   ggplot(aes(x = fct_reorder(course, ordering))) +

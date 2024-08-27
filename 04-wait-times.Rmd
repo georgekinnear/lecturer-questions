@@ -454,6 +454,125 @@ wait_time_vs_response_tab_nochain %>%
   add_header_above(c(" " = 2, "Student response" = 2))
 ```
 
+What about the position of the question in a chain?
+
+```{r}
+wait_time_by_chain_position <- all_qs_all_lecs %>%
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  filter(!is.na(code_name)) %>% 
+  mutate(
+    wait_time_bin = case_when(
+      wait_time == 0 ~ "0",
+      wait_time <3 ~ "1-2",
+      wait_time <5 ~ "3-4",
+      wait_time >4 ~ "5+"
+    )
+  ) %>% 
+  group_by(course, session, cluster_q) %>% 
+  mutate(
+    chain_status = case_when(
+      cluster_q == "N" ~ "Single question",
+      row_number() == max(row_number()) ~ "End of chain",
+      .default = "Mid chain"
+    )
+  ) %>% 
+  group_by(chain_status, wait_time_bin, student_response) %>% 
+  tally()
+
+wait_time_by_chain_position %>% 
+  group_by(chain_status, wait_time_bin) %>% 
+  mutate(pct_label = str_glue("{n}\n({round(n / sum(n) * 100, 0)}%)")) %>% 
+  ggplot(aes(x = wait_time_bin, y = n, fill = student_response)) +
+    geom_bar(position = "fill", stat = "identity") +
+    geom_text(aes(label = pct_label), position = position_fill(vjust = 0.5), colour = "white", size = 3) +
+    scale_fill_viridis_d("Student response", begin = 0, end = 0.7, option = "plasma") +
+    labs(x = "Wait time", y = "Proportion of questions", title = "Response to questions not part of a chain") +
+  facet_wrap(~ chain_status)
+
+```
+
+<details><summary>Table of values</summary>
+
+```{r}
+wait_time_by_chain_position %>% 
+  group_by(chain_status, wait_time_bin) %>% 
+  mutate(pct_label = str_glue("{round(n / sum(n) * 100, 0)}%")) %>% 
+  basic_kable()
+```
+
+</details>
+
+
+
+### Response to questions with long wait time
+
+```{r}
+long_wait_time_single_qs <- all_qs_all_lecs %>%
+  filter(!code_name %in% c("Admin", "Understanding check")) %>% 
+  filter(!is.na(code_name)) %>% 
+  filter(wait_time > 4) %>% 
+  filter(cluster_q == "N")
+```
+
+
+These are different perspectives on the `r nrow(long_wait_time_single_qs)` questions that were not part of a chain, and that had wait time of 5+ seconds.
+
+```{r}
+long_wait_time_single_qs %>% 
+  ggplot(aes(x = student_response, y = wait_time)) +
+  geom_boxplot()
+
+long_wait_time_single_qs %>% 
+  group_by(category = collapsed_code, student_response) %>% 
+  tally() %>% 
+  group_by(student_response) %>% 
+  mutate(bar_width = sum(n)) %>% 
+  ungroup() %>%
+  mutate(
+    category = fct_relevel(as_factor(category), "Fact", "Next step", "Warrant", "Evaluation", "Other")
+  ) %>%
+  mutate(bar_width = bar_width / sum(n)) %>% 
+  ggplot(aes(x = student_response)) +
+  geom_bar(aes(y = n, fill = category, width = bar_width), position = "fill", stat = "identity") +
+  scale_fill_viridis_d("Category", begin = 0.1, end = 0.8, option = "plasma", direction = -1) +
+  theme_minimal(base_size = 16) +
+  theme(
+    legend.position = "bottom",
+  ) +
+  labs(
+    x = "Question got a response",
+    y = "Proportion of questions"
+  )
+
+long_wait_time_single_qs %>% 
+  group_by(category = collapsed_code, student_response) %>% 
+  tally() %>% 
+  ggplot(aes(x = category)) +
+  geom_bar(aes(y = n, fill = student_response), position = "fill", stat = "identity") +
+  scale_fill_viridis_d("Question got a response", begin = 0.1, end = 0.8, option = "plasma", direction = -1) +
+  theme_minimal(base_size = 16) +
+  theme(
+    legend.position = "bottom",
+  ) +
+  labs(
+    x = "Question category",
+    y = "Proportion of questions"
+  )
+```
+
+
+
+<details><summary>Table with question details</summary>
+
+```{r}
+long_wait_time_single_qs %>% 
+  select(course, session, student_response, code_name, question, wait_time) %>% 
+  arrange(wait_time) %>% 
+  basic_kable()
+```
+
+</details>
+
 
 
 <details><summary>Session info</summary>
